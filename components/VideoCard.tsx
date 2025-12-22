@@ -16,15 +16,6 @@ export function VideoCard({ title, description, videoUrl, duration, tags, featur
     return (
         <Card className="overflow-hidden hover:border-primary/50 transition-colors h-full flex flex-col group/card">
             <div className="relative aspect-video bg-muted group">
-                {/* Featured Badge Overlay */}
-                {featured && (
-                    <div className="absolute top-2 left-2 z-10">
-                        <Badge variant="secondary" className="bg-background/80 backdrop-blur-md border-white/10 shadow-sm">
-                            Featured
-                        </Badge>
-                    </div>
-                )}
-
                 {videoUrl.includes("drive.google.com") ? (
                     <iframe
                         src={videoUrl}
