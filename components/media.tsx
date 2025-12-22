@@ -1,189 +1,216 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
-import { Card } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ImageIcon, Video, FileText, Camera } from "lucide-react"
-import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { Download, Filter, Grid, List, Play, Image as ImageIcon } from "lucide-react"
+import Link from "next/link"
+import { VideoCard } from "@/components/VideoCard"
+import React from "react"
+import { PhotoAlbumCard } from "@/components/PhotoAlbumCard"
+import {
+  videoProjects,
+  photoAlbums,
+  getAllVideoCategories,
+  getAllAlbumCategories,
+  type VideoProject,
+  type PhotoAlbum
+} from "@/lib/media-data"
+import { useState } from "react"
 
 export function Media() {
-  const [selectedMedia, setSelectedMedia] = useState<number | null>(null)
-  const [visibleMedia, setVisibleMedia] = useState<Set<number>>(new Set())
-  const mediaRefs = useRef<(HTMLDivElement | null)[]>([])
+  const [selectedVideoCategory, setSelectedVideoCategory] = useState<string>("all")
+  const [selectedAlbumCategory, setSelectedAlbumCategory] = useState<string>("all")
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
 
-  const mediaItems = [
-    {
-      type: "image",
-      title: "Conference Talk 2023",
-      category: "Speaking",
-      thumbnail: "/conference-stage.png",
-      fullImage: "/conference-stage-presentation.jpg",
-    },
-    {
-      type: "video",
-      title: "Product Demo",
-      category: "Demo",
-      thumbnail: "/product-demo-video.png",
-      videoUrl: "https://example.com/demo.mp4",
-    },
-    {
-      type: "image",
-      title: "Workshop Session",
-      category: "Teaching",
-      thumbnail: "/workshop-teaching.jpg",
-      fullImage: "/workshop-session-teaching.jpg",
-    },
-    {
-      type: "image",
-      title: "Team Collaboration",
-      category: "Work",
-      thumbnail: "/collaborative-teamwork.png",
-      fullImage: "/team-collaboration-office.png",
-    },
-    {
-      type: "article",
-      title: "Building Scalable Applications",
-      category: "Writing",
-      thumbnail: "/article-writing.jpg",
-      url: "https://example.com/article",
-    },
-    {
-      type: "image",
-      title: "Hackathon Win",
-      category: "Achievement",
-      thumbnail: "/hackathon-winner.jpg",
-      fullImage: "/hackathon-winner-team.jpg",
-    },
-  ]
+  const videoCategories = ["all", ...getAllVideoCategories()]
+  const albumCategories = ["all", ...getAllAlbumCategories()]
 
-  useEffect(() => {
-    const observers = mediaRefs.current.map((media, index) => {
-      if (!media) return null
+  const filteredVideos = selectedVideoCategory === "all"
+    ? videoProjects
+    : videoProjects.filter(video => video.category === selectedVideoCategory)
 
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              setVisibleMedia((prev) => new Set(prev).add(index))
-            }
-          })
-        },
-        {
-          threshold: 0.2,
-          rootMargin: "0px 0px -100px 0px",
-        },
-      )
-
-      observer.observe(media)
-      return observer
-    })
-
-    return () => {
-      observers.forEach((observer) => observer?.disconnect())
-    }
-  }, [])
-
-  const selectedMediaData = selectedMedia !== null ? mediaItems[selectedMedia] : null
-
-  const getIcon = (type: string) => {
-    switch (type) {
-      case "video":
-        return <Video className="h-4 w-4" />
-      case "article":
-        return <FileText className="h-4 w-4" />
-      default:
-        return <Camera className="h-4 w-4" />
-    }
-  }
+  const filteredAlbums = selectedAlbumCategory === "all"
+    ? photoAlbums
+    : photoAlbums.filter(album => album.category === selectedAlbumCategory)
 
   return (
-    <section id="media" className="container mx-auto px-6 py-24 bg-secondary/20">
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-12">
-          <div className="inline-flex items-center gap-3 bg-background/80 backdrop-blur-md border border-border rounded-full px-6 py-3 shadow-sm">
-            <ImageIcon className="h-6 w-6 text-primary" />
-            <h2 className="text-3xl md:text-4xl font-bold">Media & Highlights</h2>
+    <section id="media" className="container px-4 pt-32 pb-16 mx-auto scroll-mt-20">
+      <div className="space-y-12">
+        <div className="text-center space-y-4">
+          <div className="inline-flex items-center gap-3 bg-background/80 backdrop-blur-md border border-border rounded-full px-6 py-3 shadow-sm mb-4">
+            <Play className="h-6 w-6 text-primary" />
+            <h2 className="text-3xl md:text-4xl font-bold">Media Work</h2>
+          </div>
+          <div className="max-w-2xl mx-auto bg-muted/30 border border-border/50 rounded-2xl p-6 backdrop-blur-sm">
+            <p className="text-foreground text-pretty">
+              Creative projects and visual content showcasing my media production skills across video and photography.
+            </p>
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {mediaItems.map((item, index) => (
-            <div
-              key={index}
-              ref={(el) => {
-                mediaRefs.current[index] = el
-              }}
-              className={`transition-all duration-700 ${visibleMedia.has(index) ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"
-                }`}
-              style={{ transitionDelay: `${index * 100}ms` }}
-            >
-              <Card
-                className="group cursor-pointer hover:border-primary/50 transition-all duration-300 overflow-hidden"
-                onClick={() => setSelectedMedia(index)}
-              >
-                <div className="relative overflow-hidden aspect-video">
-                  <img
-                    src={item.thumbnail || "/placeholder.svg"}
-                    alt={item.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute top-3 right-3 bg-background/80 backdrop-blur-sm p-2 rounded-full">
-                    {getIcon(item.type)}
-                  </div>
-                </div>
-                <div className="p-4">
-                  <Badge variant="secondary" className="mb-2 text-xs">
-                    {item.category}
-                  </Badge>
-                  <h3 className="font-semibold group-hover:text-primary transition-colors">{item.title}</h3>
-                </div>
-              </Card>
+        {/* Video Projects Section */}
+        <div className="space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b pb-4">
+            <div className="flex items-center gap-3">
+              <Play className="h-6 w-6 text-primary" />
+              <h2 className="text-2xl font-semibold">Video Projects</h2>
+              <Badge variant="outline" className="text-xs">
+                {filteredVideos.length} projects
+              </Badge>
             </div>
-          ))}
+
+            <div className="flex items-center gap-4">
+              {/* Video Category Filter */}
+              <div className="flex items-center gap-2">
+                <Filter className="h-4 w-4 text-muted-foreground" />
+                <select
+                  value={selectedVideoCategory}
+                  onChange={(e) => setSelectedVideoCategory(e.target.value)}
+                  className="px-3 py-1 border border-input bg-background rounded-md text-sm"
+                >
+                  {videoCategories.map((category) => (
+                    <option key={category} value={category}>
+                      {category === "all" ? "All Videos" : category.charAt(0).toUpperCase() + category.slice(1)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Videos Grid */}
+          {filteredVideos.length > 0 ? (
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {filteredVideos.map((video) => (
+                <VideoCard
+                  key={video.id}
+                  title={video.title}
+                  description={video.description}
+                  videoUrl={video.videoUrl}
+                  duration={video.duration}
+                  tags={video.tags}
+                  featured={video.featured}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <div className="space-y-2">
+                <Play className="h-12 w-12 text-muted-foreground mx-auto" />
+                <h3 className="text-lg font-medium">No videos found</h3>
+                <p className="text-muted-foreground">
+                  {selectedVideoCategory === "all"
+                    ? "No video projects are configured yet."
+                    : `No videos found in the ${selectedVideoCategory} category.`}
+                </p>
+              </div>
+            </div>
+          )}
         </div>
 
-        <Dialog open={selectedMedia !== null} onOpenChange={() => setSelectedMedia(null)}>
-          <DialogContent className="max-w-4xl">
-            {selectedMediaData && (
-              <div className="space-y-4">
-                <div>
-                  <Badge variant="secondary" className="mb-2">
-                    {selectedMediaData.category}
-                  </Badge>
-                  <h3 className="text-2xl font-bold">{selectedMediaData.title}</h3>
-                </div>
+        {/* Photo Albums Section */}
+        <div className="space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b pb-4">
+            <div className="flex items-center gap-3">
+              <ImageIcon className="h-6 w-6 text-primary" />
+              <h2 className="text-2xl font-semibold">Photo Albums</h2>
+              <Badge variant="outline" className="text-xs">
+                {filteredAlbums.length} albums
+              </Badge>
+            </div>
 
-                {selectedMediaData.type === "image" && selectedMediaData.fullImage && (
-                  <img
-                    src={selectedMediaData.fullImage || "/placeholder.svg"}
-                    alt={selectedMediaData.title}
-                    className="w-full rounded-lg"
-                  />
-                )}
-
-                {selectedMediaData.type === "video" && selectedMediaData.videoUrl && (
-                  <div className="aspect-video bg-muted rounded-lg flex items-center justify-center">
-                    <p className="text-muted-foreground">Video Player</p>
-                  </div>
-                )}
-
-                {selectedMediaData.type === "article" && selectedMediaData.url && (
-                  <div className="p-6 bg-muted rounded-lg">
-                    <p className="text-muted-foreground mb-4">Read the full article on the external site</p>
-                    <a
-                      href={selectedMediaData.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary hover:underline"
-                    >
-                      View Article →
-                    </a>
-                  </div>
-                )}
+            <div className="flex items-center gap-4">
+              {/* Album Category Filter */}
+              <div className="flex items-center gap-2">
+                <Filter className="h-4 w-4 text-muted-foreground" />
+                <select
+                  value={selectedAlbumCategory}
+                  onChange={(e) => setSelectedAlbumCategory(e.target.value)}
+                  className="px-3 py-1 border border-input bg-background rounded-md text-sm"
+                >
+                  {albumCategories.map((category) => (
+                    <option key={category} value={category}>
+                      {category === "all" ? "All Albums" : category.charAt(0).toUpperCase() + category.slice(1)}
+                    </option>
+                  ))}
+                </select>
               </div>
-            )}
-          </DialogContent>
-        </Dialog>
+
+              {/* View Mode Toggle */}
+              <div className="flex items-center border border-input rounded-md">
+                <Button
+                  variant={viewMode === "grid" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setViewMode("grid")}
+                  className="rounded-r-none"
+                >
+                  <Grid className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant={viewMode === "list" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setViewMode("list")}
+                  className="rounded-l-none"
+                >
+                  <List className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Albums Grid */}
+          {filteredAlbums.length > 0 ? (
+            <div className={`grid gap-6 ${viewMode === "grid"
+              ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3"
+              : "grid-cols-1 w-full"
+              } items-start`}
+              style={{ gap: '1.5rem' }}
+            >
+              {filteredAlbums.map((album) => (
+                <PhotoAlbumCard
+                  key={album.id}
+                  id={album.id}
+                  title={album.title}
+                  description={album.description}
+                  albumUrl={album.albumUrl}
+                  localPhotos={album.localPhotos}
+                  coverImageUrl={album.coverImageUrl}
+                  date={album.date}
+                  imageCount={album.imageCount}
+                  featured={album.featured}
+                  category={album.category}
+                  className="w-full"
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <div className="space-y-2">
+                <ImageIcon className="h-12 w-12 text-muted-foreground mx-auto" />
+                <h3 className="text-lg font-medium">No albums found</h3>
+                <p className="text-muted-foreground">
+                  {selectedAlbumCategory === "all"
+                    ? "No photo albums are configured yet."
+                    : `No albums found in the ${selectedAlbumCategory} category.`}
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Contact CTA */}
+        <div className="max-w-4xl mx-auto mt-12 bg-muted/30 border border-border/50 rounded-2xl p-8 text-center backdrop-blur-sm">
+          <h3 className="text-2xl font-semibold">Interested in booking a session or seeing more?</h3>
+          <p className="text-foreground mt-2 max-w-lg mx-auto">Contact me for rates, availability, or a detailed portfolio walkthrough.</p>
+          <div className="mt-6">
+            <Button asChild size="lg" className="rounded-full px-8">
+              <a href="mailto:hvador@umich.edu">
+                Contact Me
+              </a>
+            </Button>
+          </div>
+        </div>
       </div>
     </section>
   )

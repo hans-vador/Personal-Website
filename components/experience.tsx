@@ -11,28 +11,44 @@ export function Experience() {
 
   const experiences = [
     {
-      title: "Senior Software Engineer",
-      company: "Tech Company",
-      period: "2022 — Present",
-      description:
-        "Lead development of cutting-edge web applications. Collaborate with cross-functional teams to deliver scalable solutions that drive business growth.",
-      skills: ["React", "TypeScript", "Next.js", "Node.js"],
+      title: "Project Lead",
+      company: "V1 Product Studio",
+      period: "September 2025 – Present",
+      description: [
+        "Engineered a bio-inspired modular hexapod platform utilizing an embedded Raspberry Pi 4 \"brain\" and Servo 2040 \"nervous system\" to orchestrate high-torque PWM signal processing across 18 MG996R servos",
+        "Developed custom Inverse Kinematics and spatial gait algorithms in Python/MicroPython to translate Cartesian coordinates into joint angles, achieving fluid locomotion and achieving 98% positioning accuracy during complex 6-DOF maneuvers",
+        "Architected a robust Finite State Machine to manage autonomous gait cycles and state transitions, utilizing Serial (UART) communication to bridge high-level logic with low-level actuator control, reducing state-transition jitter by 95%",
+        "Designed Human-Machine Interface by integrating a PS4 controller via Python libraries, enabling real-time teleoperation",
+        "Optimized system performance to achieve a command-to-actuation latency of under 30ms, ensuring stable operation and reactive positioning while traversing variable terrain and 30° inclines and traversing vertical obstacles up to 20 cm in height",
+        "Conceptualized a modular payload system using CAD for interchangeable end-effectors, including LiDAR pods and tactile limit-switches, expanding operational utility across 12+ simulated use cases to maximize hardware versatility",
+      ],
+      skills: ["Python", "MicroPython", "Raspberry Pi", "CAD", "Robotics", "Inverse Kinematics"],
     },
     {
-      title: "Software Engineer",
-      company: "Startup Inc",
-      period: "2020 — 2022",
-      description:
-        "Built and maintained core product features. Implemented CI/CD pipelines and improved application performance by 40%.",
-      skills: ["JavaScript", "Python", "AWS", "Docker"],
+      title: "Structural Engineer",
+      company: "Buckeye Vertical",
+      period: "December 2024 – August 2025",
+      description: [
+        "Engineered and integrated an autonomous drone system achieving 6th place worldwide at the SUAS competition, specializing in precision payload delivery and real time aerial object detection over a 3 mile flight course",
+        "Utilized SolidWorks and Onshape to create drone components and optimize battery location for ideal center of mass",
+        "Manufactured various drone parts using 3D printing including fabricating a fiberglass hood and camera stabilizer",
+        "Developed and deployed YOLOv8 computer vision models on an NVIDIA Jetson Nano, enabling real time target tracking at 8 FPS with 85% average detection accuracy under variable lighting and altitude conditions",
+        "Programmed autonomous flight behaviors using ROS 2 for adaptive mission planning, path optimization (completed laps in 4 minutes), and payload interaction, reducing navigation error by 30% across dynamic course environments",
+        "Configured and tuned Pixhawk 4 parameters via QGroundControl, synchronizing payload servos and optimizing propeller thrust profiles, resulting in a 10% improvement in lift efficiency and smoother motor transitions",
+      ],
+      skills: ["SolidWorks", "Onshape", "YOLOv8", "ROS 2", "NVIDIA Jetson", "Pixhawk"],
     },
     {
-      title: "Junior Developer",
-      company: "Digital Agency",
-      period: "2018 — 2020",
-      description:
-        "Developed responsive websites and web applications for diverse clients. Gained experience in modern web technologies and agile methodologies.",
-      skills: ["HTML", "CSS", "JavaScript", "React"],
+      title: "Photographer",
+      company: "Being Digital",
+      period: "September 2022 – Present",
+      description: [
+        "Capture, edit, and produce high-quality photography and videography for over 50 client projects",
+        "Created multiple promotional videos for various clubs and organizations including Buckeye Vertical",
+        "Leveraged professional media to develop marketing which elevated brand visibility",
+        "Design and deliver media albums tailored to client specifications",
+      ],
+      skills: ["Photography", "Videography", "Adobe Premiere Pro", "Lightroom", "Marketing"],
     },
   ]
 
@@ -93,7 +109,13 @@ export function Experience() {
                   <p className="text-primary font-medium">{exp.company}</p>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground leading-relaxed mb-4">{exp.description}</p>
+                  <ul className="list-disc list-outside ml-4 space-y-2 mb-4 text-muted-foreground">
+                    {exp.description.map((item, i) => (
+                      <li key={i} className="leading-relaxed text-sm pl-1">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
                   <div className="flex flex-wrap gap-2">
                     {exp.skills.map((skill) => (
                       <Badge key={skill} variant="secondary">

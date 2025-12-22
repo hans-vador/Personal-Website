@@ -16,62 +16,26 @@ export function Projects() {
 
   const projects = [
     {
-      title: "E-Commerce Platform",
-      shortDescription: "Full-stack e-commerce solution with real-time inventory management",
+      title: "Modular Hexapod Robotics Platform",
+      shortDescription: "Write a short description here (e.g., A custom 3D printed hexapod robot with advanced gait control)",
       fullDescription:
-        "Developed a comprehensive e-commerce platform from scratch using Next.js and Node.js. Features include real-time inventory tracking, secure payment processing, user authentication, and an admin dashboard for managing products and orders.",
-      image: "/ecommerce-dashboard-interface.png",
-      tags: ["Next.js", "TypeScript", "Stripe", "PostgreSQL"],
+        "Write your full project description here. Explain what the project is, the problem it solves, and the technologies you used. You can mention specific challenges you overcame and the final outcome.",
+      // PUT YOUR MAIN PROJECT IMAGE PATH BELOW (e.g., "/work/hexapod/main.jpg")
+      image: "",
+      tags: ["Python", "Raspberry Pi", "ROS", "3D Printing"], // Add your tech stack tags here
       process: [
+        // ADD YOUR PROCESS STEPS HERE
+        // Copy and paste the object below for each step you want to add
         {
-          title: "Planning & Design",
-          description: "Created wireframes and user flows. Designed the database schema and API architecture.",
-          images: ["/wireframe-design-sketches.jpg", "/database-schema.png"],
-          video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-        },
-        {
-          title: "Development",
-          description:
-            "Built the frontend with Next.js and implemented the backend API. Integrated Stripe for payments.",
-          images: ["/code-editor-interface.png", "/payment-integration.png"],
-        },
-        {
-          title: "Testing & Launch",
-          description:
-            "Conducted thorough testing, fixed bugs, and deployed to production. Set up monitoring and analytics.",
-          images: ["/testing-dashboard.jpg", "/analytics-dashboard.png"],
+          title: "Step 1: Planning (Example)",
+          description: "Describe this step of the process...",
+          images: [], // Add paths to images as strings: ["/path/to/image1.jpg", "/path/to/image2.jpg"]
+          video: "", // Optional: Add a YouTube embed URL if you have one
         },
       ],
-      demo: "https://demo.example.com",
-      github: "https://github.com",
-    },
-    {
-      title: "AI Chat Application",
-      shortDescription: "Real-time chat application powered by AI with smart responses",
-      fullDescription:
-        "Built an intelligent chat application that uses AI to provide contextual responses. Features include real-time messaging, user presence indicators, message history, and AI-powered suggestions.",
-      image: "/chat-application-interface.png",
-      tags: ["React", "WebSocket", "OpenAI", "MongoDB"],
-      process: [
-        {
-          title: "Research",
-          description: "Researched AI APIs and real-time communication protocols. Evaluated different tech stacks.",
-          images: ["/research-notes-and-diagrams.jpg", "/technology-comparison-chart.jpg"],
-        },
-        {
-          title: "Implementation",
-          description: "Set up WebSocket connections, integrated OpenAI API, and built the chat interface.",
-          images: ["/modern-chat-interface.jpg", "/websocket-architecture.jpg"],
-          video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-        },
-        {
-          title: "Optimization",
-          description: "Optimized message delivery, implemented caching, and improved AI response quality.",
-          images: ["/performance-metrics-dashboard.png"],
-        },
-      ],
-      demo: "https://demo.example.com",
-      github: "https://github.com",
+      // REPLACE WITH YOUR LINKS
+      demo: "https://youtube.com",
+      github: "https://github.com/yourusername/repo",
     },
     {
       title: "Volume Control",
@@ -119,21 +83,21 @@ export function Projects() {
   return (
     <section id="projects" className="container mx-auto px-6 py-24 relative z-10">
       <div className="max-w-6xl mx-auto">
-        <div className="mb-12">
+        <div className="mb-12 text-center">
           <div className="inline-flex items-center gap-3 bg-background/80 backdrop-blur-md border border-border rounded-full px-6 py-3 shadow-sm">
             <Code className="h-6 w-6 text-primary" />
             <h2 className="text-3xl md:text-4xl font-bold">Projects</h2>
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="flex flex-wrap justify-center gap-8">
           {projects.map((project, index) => (
             <div
               key={index}
               ref={(el) => {
                 projectRefs.current[index] = el
               }}
-              className={`transition-all duration-700 ${visibleProjects.has(index) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+              className={`w-full max-w-[400px] transition-all duration-700 ${visibleProjects.has(index) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
                 }`}
               style={{ transitionDelay: `${index * 150}ms` }}
             >
