@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Github, ExternalLink, Download, ChevronLeft, ChevronRight, ArrowLeft } from "lucide-react"
+import { Github, ExternalLink, Download, ChevronLeft, ChevronRight, ArrowLeft, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
@@ -103,44 +103,23 @@ export default function VolumeControlProject() {
     }
 
     return (
-        <div className="min-h-screen bg-background">
-            {/* Header */}
-            <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                <div className="container px-5 flex h-14 items-center">
-                    <div className="hidden md:flex">
-                        <nav className="flex items-center space-x-6 text-sm font-medium">
-                            <Link href="/#about" className="transition-colors hover:text-primary">
-                                About
-                            </Link>
-                            <Link href="/#projects" className="transition-colors hover:text-primary font-semibold text-primary">
-                                Projects
-                            </Link>
-                            <Link href="/#media" className="transition-colors hover:text-primary">
-                                Media
-                            </Link>
-                        </nav>
-                    </div>
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center space-x-2">
-                        <Button variant="outline" size="sm" asChild>
-                            <a href="/Resume.pdf" target="_blank" rel="noopener noreferrer">
-                                <Download className="mr-2 h-4 w-4" />
-                                Resume
-                            </a>
-                        </Button>
-                    </div>
-                </div>
-            </header>
+        <div className="min-h-screen bg-background relative">
+            {/* Close Button */}
+            <Button
+                variant="ghost"
+                size="icon"
+                asChild
+                className="fixed top-6 right-6 z-50 rounded-full bg-background/80 backdrop-blur-sm border shadow-sm hover:bg-accent"
+            >
+                <Link href="/#projects">
+                    <X className="h-5 w-5" />
+                    <span className="sr-only">Close</span>
+                </Link>
+            </Button>
 
             {/* Project Detail */}
             <section className="container px-4 py-16 mx-auto">
                 <div className="space-y-12">
-                    {/* Back Button */}
-                    <Button variant="ghost" asChild className="mb-8">
-                        <Link href="/#projects">
-                            <ArrowLeft className="mr-2 h-4 w-4" />
-                            Back to Projects
-                        </Link>
-                    </Button>
 
                     {/* Project Header */}
                     <div className="text-center space-y-6">
