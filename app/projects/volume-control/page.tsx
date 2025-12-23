@@ -10,7 +10,6 @@ import { useState } from "react"
 
 export default function VolumeControlProject() {
     const [currentVersion, setCurrentVersion] = useState(0)
-
     const versions = [
         {
             version: "Version 1.0",

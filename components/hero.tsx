@@ -16,7 +16,7 @@ export function Hero() {
           <div className="mb-8 p-4 bg-muted/50 border border-border rounded-lg backdrop-blur-sm">
             <div className="text-muted-foreground flex flex-col gap-1">
               <span className="font-semibold text-foreground">Bachelor of Science in Mechanical and Computer Engineering</span>
-              <span>University of Michigan • 2023-2027</span>
+              <span>University of Michigan</span>
             </div>
           </div>
 

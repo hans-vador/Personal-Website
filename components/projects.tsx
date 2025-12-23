@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { ExternalLink, Github, Code, X } from "lucide-react"
+import { Github, Code, X } from "lucide-react"
 import { TiltCard } from "@/components/ui/tilt-card"
 import { useRouter } from "next/navigation"
 
@@ -17,25 +17,56 @@ export function Projects() {
   const projects = [
     {
       title: "Modular Hexapod Robotics Platform",
-      shortDescription: "Write a short description here (e.g., A custom 3D printed hexapod robot with advanced gait control)",
+      shortDescription: "A modular hexapod consisting of 18 MG996R servos, a Raspberry Pi, and a Servo2040 capable of teleoperation through a PS4 Controller",
       fullDescription:
-        "Write your full project description here. Explain what the project is, the problem it solves, and the technologies you used. You can mention specific challenges you overcame and the final outcome.",
+        `As part of V1's new cohort, I had the opportunity to pursue a passion project, and as a die-hard Hardware engineer (no pun intended),
+        I decided to take this opportunity to build the coolest robot possible. A modular hexapod 🕷️`,
       // PUT YOUR MAIN PROJECT IMAGE PATH BELOW (e.g., "/work/hexapod/main.jpg")
-      image: "",
-      tags: ["Python", "Raspberry Pi", "ROS", "3D Printing"], // Add your tech stack tags here
+      image: "/work/SpiderBot/1.JPG",
+      tags: ["MicroPython", "Raspberry Pi", "Servo2040", "CAD", "3D Printing"], // Add your tech stack tags here
       process: [
         // ADD YOUR PROCESS STEPS HERE
         // Copy and paste the object below for each step you want to add
         {
-          title: "Step 1: Planning (Example)",
-          description: "Describe this step of the process...",
-          images: [], // Add paths to images as strings: ["/path/to/image1.jpg", "/path/to/image2.jpg"]
+          title: "Step 1: How in the world do we make this within 8 weeks?",
+          description: `My partner and I had one main goal for this project which was to have somewhat of a working product by 8 weeks.
+          With 2 weeks used up in club initiations and brainstorming, we knew doing this whole project from scratch might be out of our time scope.
+          Luckily we found a YouTuber by the name of MakeYourPet who gave us the perfect base to work off of. Using his design models as a guide, 
+          we quickly ordered and printed all the necessary parts. We also had in mind the general embedded system architecture we would use,
+           which is displayed below.`,
+          materials: [
+            { name: "MG996R Servos (4-pack)", amount: "5", link: "https://www.amazon.com/4-Pack-MG996R-Torque-Digital-Helicopter/dp/B07MFK266B?th=1" },
+            { name: "18 Channel Servo Controller", amount: "1", link: "https://www.adafruit.com/product/5437?srsltid=AfmBOorn52bKxREJuZnsdrBYkauNoF4JrYDRb7Y_26m78wRmBdA5mPlZ" },
+            { name: "Screws/Nuts", amount: "1", link: "https://www.amazon.com/gp/product/B0CJJFFCW2/ref=ewc_pr_img_1?smid=A2XXMW1BKOEL72&th=1" },
+            { name: "Grippy Tips", amount: "1", link: "https://www.amazon.com/uxcell-Thread-Protectors-16-inch-Flexible/dp/B07V5T8RL1?th=1" },
+            { name: "Limit Switches", amount: "1", link: "https://www.amazon.com/MXRS-Hinge-Momentary-Button-Switch/dp/B088W8WMTB" },
+          ],
+          images: ["/work/SpiderBot/2.png"], // Add paths to images as strings: ["/path/to/image1.jpg", "/path/to/image2.jpg"]
+          video: "", // Optional: Add a YouTube embed URL if you have one
+        },
+        {
+          title: "Step 2: Assemble and Code",
+          description: `With everything ready, we got to work. After plenty of hot glue, screws, and countless hours, we finally assembled the legs. 
+          The next step was developing the inverse kinematics equations in Python, where we encountered several calibration and edge-case issues due 
+          to the high dimensionality of our specific setup. However, through rigorous debugging, we moved past those hurdles and began developing the 
+          walking gait functions. Without getting into the nitty-gritty, we designed a program that utilizes a tripod gait: three legs remain in a stance 
+          phase to provide stability while the other three swing forward to advance. We also implemented a "flex" function to adjust the robot's orientation 
+          and an individual leg override for manual control. To manage these various behaviors, we utilized a State Machine to handle all the operational modes.`,
+          images: [
+            "/work/SpiderBot/Gif6.gif",
+            "/work/SpiderBot/Gif3.gif",
+            "/work/SpiderBot/6.png",
+            "/work/SpiderBot/5.png",
+            "/work/SpiderBot/3.JPG",
+            "/work/SpiderBot/4.png",
+            { src: "/work/SpiderBot/Gif4.gif", caption: "This was still in testing phase as you can see the legs are walking against each other here 🤣" }
+          ],
           video: "", // Optional: Add a YouTube embed URL if you have one
         },
       ],
       // REPLACE WITH YOUR LINKS
       demo: "https://youtube.com",
-      github: "https://github.com/yourusername/repo",
+      github: "https://github.com/hans-vador/SpiderBot",
     },
     {
       title: "Volume Control",
@@ -166,11 +197,11 @@ export function Projects() {
                   {/* Content */}
                   <div className="p-6 space-y-8">
                     {/* Hero Image */}
-                    <div className="rounded-lg overflow-hidden">
+                    <div className="rounded-lg overflow-hidden flex justify-center bg-black/5">
                       <img
                         src={selectedProjectData.image || "/placeholder.svg"}
                         alt={selectedProjectData.title}
-                        className="w-full h-auto"
+                        className="max-h-[60vh] w-auto max-w-full object-contain"
                       />
                     </div>
 
@@ -196,18 +227,72 @@ export function Projects() {
                                 <h4 className="text-xl font-semibold mb-3">{step.title}</h4>
                                 <p className="text-muted-foreground leading-relaxed mb-6">{step.description}</p>
 
+                                {/* Materials List */}
+                                {(step as any).materials && (
+                                  <div className="mb-6">
+                                    <h5 className="font-semibold mb-3">Materials List</h5>
+                                    <div className="overflow-x-auto rounded-lg border border-border">
+                                      <table className="w-full text-sm text-left">
+                                        <thead className="bg-muted/50">
+                                          <tr>
+                                            <th className="p-3 font-medium">Material</th>
+                                            <th className="p-3 font-medium">Amount</th>
+                                            <th className="p-3 font-medium">Link</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          {(step as any).materials.map((item: any, i: number) => (
+                                            <tr key={i} className="border-t border-border">
+                                              <td className="p-3">{item.name}</td>
+                                              <td className="p-3">{item.amount}</td>
+                                              <td className="p-3">
+                                                {item.link ? (
+                                                  <a
+                                                    href={item.link}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-primary hover:underline"
+                                                  >
+                                                    Link
+                                                  </a>
+                                                ) : (
+                                                  <span className="text-muted-foreground">-</span>
+                                                )}
+                                              </td>
+                                            </tr>
+                                          ))}
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                    <p className="mt-4 text-sm text-muted-foreground italic">
+                                      Plus some stuff I used laying around the house (Raspberry Pi 4, Power Supply, Breakout Board, Wires, etc.)...
+                                    </p>
+                                  </div>
+                                )}
+
                                 {/* Images Grid */}
                                 {step.images && step.images.length > 0 && (
-                                  <div className={`grid gap-4 mb-6 ${step.images.length > 1 ? "md:grid-cols-2" : ""}`}>
-                                    {step.images.map((img, imgIdx) => (
-                                      <div key={imgIdx} className="rounded-lg overflow-hidden">
-                                        <img
-                                          src={img || "/placeholder.svg"}
-                                          alt={`${step.title} ${imgIdx + 1}`}
-                                          className="w-full h-auto"
-                                        />
-                                      </div>
-                                    ))}
+                                  <div className={`columns-1 md:columns-2 gap-4 mb-6 block`}>
+                                    {step.images.map((img, imgIdx) => {
+                                      const isObject = typeof img === 'object' && img !== null;
+                                      const src = isObject ? (img as any).src : img;
+                                      const caption = isObject ? (img as any).caption : null;
+
+                                      return (
+                                        <div key={imgIdx} className="break-inside-avoid rounded-lg overflow-hidden flex flex-col bg-black/5 mb-4">
+                                          <img
+                                            src={src || "/placeholder.svg"}
+                                            alt={`${step.title} ${imgIdx + 1}`}
+                                            className="w-full h-auto object-cover"
+                                          />
+                                          {caption && (
+                                            <div className="p-3 bg-muted/50 text-sm text-muted-foreground italic text-center border-t border-border">
+                                              {caption}
+                                            </div>
+                                          )}
+                                        </div>
+                                      );
+                                    })}
                                   </div>
                                 )}
 
@@ -231,12 +316,6 @@ export function Projects() {
 
                     {/* Action Buttons */}
                     <div className="flex flex-wrap gap-4 pt-6 border-t border-border">
-                      <Button size="lg" asChild>
-                        <a href={selectedProjectData.demo} target="_blank" rel="noopener noreferrer">
-                          <ExternalLink className="h-5 w-5 mr-2" />
-                          View Live Demo
-                        </a>
-                      </Button>
                       <Button size="lg" variant="outline" asChild>
                         <a href={selectedProjectData.github} target="_blank" rel="noopener noreferrer">
                           <Github className="h-5 w-5 mr-2" />
