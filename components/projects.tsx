@@ -4,8 +4,9 @@ import { useState, useEffect, useRef } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Github, Code, X } from "lucide-react"
+import { Github, X } from "lucide-react"
 import { TiltCard } from "@/components/ui/tilt-card"
+import { TrackingField } from "@/components/tracking-field"
 import { useRouter } from "next/navigation"
 
 export function Projects() {
@@ -113,12 +114,13 @@ export function Projects() {
 
   return (
     <section id="projects" className="container mx-auto px-6 py-24 relative z-10">
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-12 text-center">
-          <div className="inline-flex items-center gap-3 bg-background/80 backdrop-blur-md border border-border rounded-full px-6 py-3 shadow-sm">
-            <Code className="h-6 w-6 text-primary" />
-            <h2 className="text-3xl md:text-4xl font-bold">Projects</h2>
-          </div>
+      <TrackingField />
+      <div className="max-w-6xl mx-auto relative">
+        <div className="mb-12">
+          <p className="eyebrow mb-3">02 / What I&apos;ve built</p>
+          <h2 className="text-4xl md:text-6xl font-semibold uppercase tracking-[-0.03em]">
+            Projects<span className="text-[var(--hud)]">.</span>
+          </h2>
         </div>
 
         <div className="flex flex-wrap justify-center gap-8">
@@ -134,7 +136,7 @@ export function Projects() {
             >
               <TiltCard className="h-full">
                 <Card
-                  className="group h-full cursor-pointer border-border hover:border-primary transition-all duration-500 shadow-xl hover:shadow-2xl bg-card/70 backdrop-blur-md"
+                  className="group hud-corners h-full cursor-pointer border-border/60 hover:border-primary transition-all duration-500 shadow-sm hover:shadow-lg bg-card/60 backdrop-blur-sm"
                   onClick={() => {
                     if ((project as any).link) {
                       router.push((project as any).link)
@@ -149,6 +151,10 @@ export function Projects() {
                       alt={project.title}
                       className="w-full h-full object-cover"
                     />
+                    {/* detection-HUD tag, revealed on hover */}
+                    <span className="absolute top-2 right-2 font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 bg-background/70 backdrop-blur-sm border border-[var(--hud)]/60 text-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      [ {String(index + 1).padStart(2, "0")} ]
+                    </span>
                   </div>
                   <CardContent className="p-6">
                     <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors duration-300">
@@ -157,7 +163,11 @@ export function Projects() {
                     <p className="text-muted-foreground text-sm leading-relaxed mb-4">{project.shortDescription}</p>
                     <div className="flex flex-wrap gap-2">
                       {project.tags.slice(0, 3).map((tag) => (
-                        <Badge key={tag} variant="secondary" className="text-xs">
+                        <Badge
+                          key={tag}
+                          variant="outline"
+                          className="font-mono text-[10px] font-normal uppercase tracking-wider rounded-sm border-border/70 text-muted-foreground"
+                        >
                           {tag}
                         </Badge>
                       ))}

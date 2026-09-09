@@ -30,8 +30,8 @@ export function Header() {
     <header className="sticky top-0 z-50 backdrop-blur-lg border-b border-border/40 bg-background/80">
       <nav className="w-full px-6 py-4">
         <div className="flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold text-foreground">
-            Hans Vador
+          <Link href="/" className="text-lg font-semibold uppercase tracking-[-0.02em] text-foreground">
+            Hans Vador<span className="text-[var(--hud)]">.</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -41,7 +41,7 @@ export function Header() {
                 key={item.href}
                 href={item.href}
                 onClick={(e) => handleScroll(e, item.href)}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
               >
                 {item.label}
               </a>

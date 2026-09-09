@@ -1,22 +1,28 @@
 import { Mail } from "lucide-react"
+import { PixelField } from "@/components/pixel-field"
 
 export function Hero() {
   return (
-    <section id="about" className="relative w-full px-6 py-24 md:py-32 min-h-screen flex items-center overflow-hidden">
+    <section id="about" className="relative w-full px-6 py-24 md:py-32 min-h-screen flex items-center overflow-hidden bg-blueprint">
+      <PixelField />
       <div className="max-w-[90%] md:max-w-7xl ml-0 w-full relative z-10 grid md:grid-cols-5 gap-12 items-center">
         {/* Left Column: Text */}
-        <div className="md:col-span-3 bg-card/80 backdrop-blur-md border border-border rounded-2xl p-8 md:p-12 shadow-2xl">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-balance">Hans Vador</h1>
-          <p className="text-xl md:text-2xl text-primary mb-4">Mechanical & Computer Engineering Student</p>
-          <p className="text-lg text-muted-foreground leading-relaxed mb-4 max-w-2xl">
+        <div className="md:col-span-3 hud-corners bg-background/70 backdrop-blur-sm border border-border/60 rounded-lg p-8 md:p-12">
+          <p className="eyebrow mb-5">Mechanical &amp; Computer Engineering Student</p>
+          <h1 className="text-6xl md:text-8xl font-semibold uppercase tracking-[-0.04em] leading-[0.9] mb-6 text-balance">
+            Hans
+            <br />
+            Vador.
+          </h1>
+          <p className="text-lg text-muted-foreground leading-relaxed mb-8 max-w-2xl">
             Bridging the gap between hardware design and computational logic. Dedicated to building responsive,
             intelligent robots that make a difference.
           </p>
 
-          <div className="mb-8 p-4 bg-muted/50 border border-border rounded-lg backdrop-blur-sm">
+          <div className="mb-8 py-3 pl-4 border-l-2 border-[var(--hud)]/70">
             <div className="text-muted-foreground flex flex-col gap-1">
-              <span className="font-semibold text-foreground">Bachelor of Science in Mechanical and Computer Engineering</span>
-              <span>University of Michigan</span>
+              <span className="font-medium text-foreground">Bachelor of Science in Mechanical and Computer Engineering</span>
+              <span className="font-mono text-sm uppercase tracking-wider">University of Michigan</span>
             </div>
           </div>
 

@@ -37,16 +37,16 @@ export function Media() {
   return (
     <section id="media" className="container px-4 pt-32 pb-16 mx-auto scroll-mt-20">
       <div className="space-y-12">
-        <div className="text-center space-y-4">
-          <div className="inline-flex items-center gap-3 bg-background/80 backdrop-blur-md border border-border rounded-full px-6 py-3 shadow-sm mb-4">
-            <Play className="h-6 w-6 text-primary" />
-            <h2 className="text-3xl md:text-4xl font-bold">Media Work</h2>
+        <div className="space-y-4">
+          <div className="mb-2">
+            <p className="eyebrow mb-3">03 / Behind the lens</p>
+            <h2 className="text-4xl md:text-6xl font-semibold uppercase tracking-[-0.03em]">
+              Media Work<span className="text-[var(--hud)]">.</span>
+            </h2>
           </div>
-          <div className="max-w-2xl mx-auto bg-muted/30 border border-border/50 rounded-2xl p-6 backdrop-blur-sm">
-            <p className="text-foreground text-pretty">
-              Creative projects and visual content showcasing my media production skills across video and photography.
-            </p>
-          </div>
+          <p className="max-w-2xl text-muted-foreground text-pretty">
+            Creative projects and visual content showcasing my media production skills across video and photography.
+          </p>
         </div>
 
         {/* Video Projects Section */}

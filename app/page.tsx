@@ -5,12 +5,12 @@ import { Projects } from "@/components/projects"
 import { Media } from "@/components/media"
 
 
-import { ParticleWave } from "@/components/particle-wave"
+import { PixelMosaic } from "@/components/pixel-mosaic"
 
 export default function Home() {
   return (
     <main className="relative min-h-screen">
-      <ParticleWave />
+      <PixelMosaic />
 
       <div className="relative z-10">
         <Header />
