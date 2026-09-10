@@ -25,11 +25,12 @@ export function ChannelTile({ label, preview, onOpen, onHover, launching }: Chan
       {/* the little name tab that rises above a channel under the pointer */}
       <span className="wii-channel-tip">{label}</span>
 
+      {/* The art fills the plate edge to edge, as on the console, with the
+          name laid over the bottom of it rather than in its own band. */}
       <span className="wii-channel-face">
-        <span className="absolute inset-0 bottom-[20px] overflow-hidden">{preview}</span>
+        <span className="absolute inset-0 overflow-hidden">{preview}</span>
+        <span className="wii-channel-label truncate">{label}</span>
       </span>
-
-      <span className="wii-channel-label truncate">{label}</span>
     </button>
   )
 }

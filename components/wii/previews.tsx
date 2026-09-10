@@ -12,34 +12,24 @@ export function ImagePreview({ src, alt, position }: { src: string; alt: string;
   return <FillImage src={src} alt={alt} sizes={TILE_SIZES} position={position} />
 }
 
-/* Company initials on a tinted field — stands in for a channel logo. */
-export function MonogramPreview({
-  initials,
-  caption,
-  hue,
-}: {
-  initials: string
-  caption: string
-  hue: number
-}) {
+/**
+ * Company initials on a tinted field — stands in for a channel logo.
+ * The name itself is drawn by the tile's own label, so the art carries
+ * only the mark, nudged up clear of that band.
+ */
+export function MonogramPreview({ initials, hue }: { initials: string; hue: number }) {
   return (
     <span
-      className="flex h-full w-full flex-col items-center justify-center gap-1"
+      className="flex h-full w-full items-center justify-center pb-[16%]"
       style={{
         background: `linear-gradient(160deg, hsl(${hue} 72% 92%) 0%, hsl(${hue} 60% 80%) 100%)`,
       }}
     >
       <span
-        className="text-[26px] leading-none tracking-tight"
-        style={{ color: `hsl(${hue} 55% 28%)` }}
+        className="text-[clamp(16px,2.3vw,30px)] leading-none tracking-tight"
+        style={{ color: `hsl(${hue} 55% 30%)` }}
       >
         {initials}
-      </span>
-      <span
-        className="px-2 text-center text-[9px] leading-tight"
-        style={{ color: `hsl(${hue} 40% 34%)` }}
-      >
-        {caption}
       </span>
     </span>
   )
@@ -88,13 +78,10 @@ export function VideoPreview() {
           backgroundImage: "repeating-linear-gradient(90deg, #0d151c 0 5px, transparent 5px 11px)",
         }}
       />
-      <span className="grid h-11 w-11 place-items-center rounded-full bg-white/95 shadow-lg">
+      <span className="mb-[14%] grid h-[38%] w-auto aspect-square place-items-center rounded-full bg-white/95 shadow-lg">
         <svg width="15" height="17" viewBox="0 0 15 17" aria-hidden="true">
           <path d="M2 1.6 13.2 8.5 2 15.4z" fill="#16202a" />
         </svg>
-      </span>
-      <span className="absolute bottom-4 text-[9px] tracking-wide text-white/80">
-        {videoProjects.length} films
       </span>
     </span>
   )
@@ -133,9 +120,6 @@ export function AboutPreview() {
   return (
     <span className="relative block h-full w-full">
       <FillImage src={about.portrait} alt="" sizes={TILE_SIZES} position="center 28%" priority />
-      <span className="absolute inset-x-0 bottom-0 z-[2] bg-gradient-to-t from-black/55 to-transparent px-2 pb-1.5 pt-5 text-[10px] text-white">
-        {about.school}
-      </span>
     </span>
   )
 }
@@ -152,7 +136,7 @@ export function ExperiencePreviewFor({ id }: { id: string }) {
   const exp = experiences.find((e) => e.id === id)
   const meta = experienceHues[id]
   if (!exp || !meta) return null
-  return <MonogramPreview initials={meta.initials} caption={exp.company} hue={meta.hue} />
+  return <MonogramPreview initials={meta.initials} hue={meta.hue} />
 }
 
 export const albumCovers = photoAlbums.flatMap((a) => a.localPhotos.slice(0, 2))

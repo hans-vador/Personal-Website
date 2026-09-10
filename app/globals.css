@@ -3,62 +3,87 @@
 
 /* ========================================================================
    Wii Menu recreation.
-   Neutral grey room, thin-bordered white channel plates, the swooping
-   white footer with its cyan edge, and big circular corner buttons.
-   Drawn from scratch — no console assets are used.
+
+   Geometry and colour are measured from a reference frame of the real
+   dashboard (420x236). Recorded there, and reproduced below:
+
+     background   #efefef at centre falling to #e3e3e3 at the edges
+     channel      84x47 (16:9), columns at x 35/123/212/300, 4px gutter,
+                  35px side margin (8.33%), rows at y 19/69/119, 3px gutter
+     empty slot   #e5e5e5 -> #cacaca -> #d8d8d8, watermarked
+     cyan         #3bbdea
+     footer edge  y=171 at both ends, dipping to y=196 across the middle
+     footer fill  #b5b7bd under the edge, #d4d5db, then #cdcfd7
+     buttons      cyan-ringed, centred on y=195
+
+   Everything is drawn from scratch; no console assets are used.
    ===================================================================== */
 
 :root {
-  /* the room: near-neutral grey, very slightly cool */
-  --wii-bg-top: #f2f3f4;
-  --wii-bg-mid: #ebecee;
-  --wii-bg-bot: #dcdee1;
+  /* the room */
+  --wii-bg-centre: #efefef;
+  --wii-bg-edge: #e3e3e3;
 
   /* channel plates */
   --wii-plate: #ffffff;
-  --wii-plate-line: #c8cbcf;
-  --wii-plate-shadow: rgba(120, 128, 136, 0.22);
+  --wii-plate-line: #c4c4c4;
+  --wii-plate-shadow: rgba(120, 124, 130, 0.2);
 
   /* empty slots */
-  --wii-empty-top: #e6e8ea;
-  --wii-empty-bot: #d8dade;
-  --wii-empty-mark: #cdd0d4;
+  --wii-empty-top: #e5e5e5;
+  --wii-empty-mid: #cacaca;
+  --wii-empty-bot: #d8d8d8;
+  --wii-empty-mark: #bcbcbc;
 
   /* the signature cyan */
-  --wii-blue: #22b7e6;
-  --wii-blue-deep: #0f8fb8;
-  --wii-blue-glow: rgba(60, 200, 245, 0.85);
+  --wii-blue: #3bbdea;
+  --wii-blue-bright: #43bdf3;
+  --wii-blue-deep: #1793c4;
+  --wii-blue-glow: rgba(59, 189, 234, 0.85);
 
-  /* chrome + type */
-  --wii-bar: #ffffff;
-  --wii-bar-line: #c3c7cc;
-  --wii-ink: #6f767d;
-  --wii-ink-strong: #3d444a;
-  --wii-ink-soft: #9aa1a8;
-  --wii-clock: #a8aeb4;
+  /* footer + type */
+  --wii-bar-top: #b5b7bd;
+  --wii-bar-mid: #d4d5db;
+  --wii-bar-bot: #cdcfd7;
+  --wii-ink: #6c7076;
+  --wii-ink-strong: #3f4348;
+  --wii-ink-soft: #9498a0;
+  --wii-clock: #7c7c82;
+
+  /* grid metrics, straight from the reference */
+  --wii-margin: 8.33%;
+  --wii-gutter: 0.95vw;
+
+  /**
+   * One unit of the reference's 236-tall frame. On a 16:9 screen 1vh and
+   * 0.5625vw are the same, so this reproduces the console exactly there;
+   * on a taller screen it follows the width instead, which keeps the
+   * footer and its buttons from swelling out of the viewport.
+   */
+  --wii-u: min(1vh, 0.5625vw);
 
   --radius: 0.5rem;
 
-  /* legacy tokens, kept so stray utilities still resolve */
-  --background: #ebecee;
-  --foreground: #3d444a;
+  /* legacy tokens so any stray utility still resolves */
+  --background: #ebebeb;
+  --foreground: #3f4348;
   --card: #ffffff;
-  --card-foreground: #3d444a;
+  --card-foreground: #3f4348;
   --popover: #ffffff;
-  --popover-foreground: #3d444a;
-  --primary: #22b7e6;
+  --popover-foreground: #3f4348;
+  --primary: #3bbdea;
   --primary-foreground: #ffffff;
-  --secondary: #e6e8ea;
-  --secondary-foreground: #3d444a;
-  --muted: #e2e4e7;
-  --muted-foreground: #9aa1a8;
-  --accent: #dceef7;
-  --accent-foreground: #3d444a;
+  --secondary: #e6e6e6;
+  --secondary-foreground: #3f4348;
+  --muted: #e2e2e2;
+  --muted-foreground: #9498a0;
+  --accent: #dcf0f9;
+  --accent-foreground: #3f4348;
   --destructive: #d9534f;
   --destructive-foreground: #ffffff;
-  --border: #c8cbcf;
-  --input: #c8cbcf;
-  --ring: #22b7e6;
+  --border: #c4c4c4;
+  --input: #c4c4c4;
+  --ring: #3bbdea;
 }
 
 @theme inline {
@@ -101,7 +126,7 @@
 
   body {
     color: var(--wii-ink-strong);
-    background: var(--wii-bg-mid);
+    background: var(--wii-bg-edge);
     font-family: var(--font-wii-round), "Varela Round", ui-rounded, system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     overscroll-behavior: none;
@@ -122,20 +147,25 @@
 .wii-room {
   position: fixed;
   inset: 0;
-  background: linear-gradient(
-    to bottom,
-    var(--wii-bg-top) 0%,
-    var(--wii-bg-mid) 52%,
-    var(--wii-bg-bot) 100%
+  background: radial-gradient(
+    115% 90% at 50% 38%,
+    var(--wii-bg-centre) 0%,
+    #eaeaea 45%,
+    var(--wii-bg-edge) 100%
   );
 }
 
 /* -------------------------------------------------------- the channels */
 
-.wii-channel {
+/* 84x47 in the reference — 16:9. */
+.wii-channel,
+.wii-channel-empty {
   position: relative;
-  aspect-ratio: 12 / 7;
+  aspect-ratio: 84 / 47;
   width: 100%;
+}
+
+.wii-channel {
   cursor: none;
   border: 0;
   padding: 0;
@@ -146,7 +176,7 @@
 
 .wii-channel:hover,
 .wii-channel:focus-visible {
-  transform: scale(1.04);
+  transform: scale(1.045);
   outline: none;
   z-index: 5;
 }
@@ -158,13 +188,13 @@
 .wii-channel-face {
   position: absolute;
   inset: 0;
-  border-radius: 9px;
+  border-radius: 7px;
   overflow: hidden;
   background: var(--wii-plate);
   box-shadow:
     inset 0 0 0 1px #ffffff,
     inset 0 0 0 2px var(--wii-plate-line),
-    0 2px 4px var(--wii-plate-shadow);
+    0 1px 3px var(--wii-plate-shadow);
   transition: box-shadow 150ms ease;
 }
 
@@ -173,57 +203,56 @@
   box-shadow:
     inset 0 0 0 1px #ffffff,
     inset 0 0 0 3px var(--wii-blue),
-    0 0 16px var(--wii-blue-glow),
-    0 3px 7px var(--wii-plate-shadow);
+    0 0 15px var(--wii-blue-glow),
+    0 2px 6px var(--wii-plate-shadow);
 }
 
-/* thin glassy sweep across the top, like the console's plates */
+/* thin glassy sweep over the top of every plate */
 .wii-gloss::before {
   content: "";
   position: absolute;
   left: 2px;
   right: 2px;
   top: 2px;
-  height: 38%;
-  border-radius: 7px 7px 50% 50% / 7px 7px 16% 16%;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.05));
+  height: 40%;
+  border-radius: 5px 5px 50% 50% / 5px 5px 18% 18%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.04));
   pointer-events: none;
   z-index: 3;
 }
 
-/* name plate along the bottom of a channel */
+/* the channel's name, sitting on the art the way the Shop Channel's does */
 .wii-channel-label {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
   z-index: 4;
-  padding: 4px 6px 5px;
-  font-size: 11px;
+  padding: 9px 5px 3px;
+  font-size: clamp(8px, 0.78vw, 11px);
   line-height: 1.1;
   color: var(--wii-ink-strong);
   text-align: center;
-  background: rgba(255, 255, 255, 0.93);
-  border-top: 1px solid var(--wii-plate-line);
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.94) 55%, rgba(255, 255, 255, 0));
 }
 
-/* the hover tab that pops above a channel, as on the real dashboard */
+/* the tab that rises above a channel under the pointer */
 .wii-channel-tip {
   position: absolute;
   left: 50%;
-  bottom: calc(100% + 5px);
+  bottom: calc(100% + 4px);
   z-index: 8;
   transform: translateX(-50%) translateY(3px);
-  padding: 3px 10px;
-  border-radius: 5px;
+  padding: 2px 9px;
+  border-radius: 4px;
   font-size: 11px;
   white-space: nowrap;
   color: var(--wii-ink-strong);
-  background: linear-gradient(to bottom, #fdfdfd, #e9ebed);
+  background: linear-gradient(to bottom, #fdfdfd, #e7e7e7);
   box-shadow:
     inset 0 0 0 1px #ffffff,
     inset 0 0 0 1.5px var(--wii-plate-line),
-    0 2px 5px rgba(120, 128, 136, 0.3);
+    0 2px 5px rgba(120, 124, 130, 0.32);
   opacity: 0;
   pointer-events: none;
   transition: opacity 130ms ease, transform 130ms ease;
@@ -235,19 +264,18 @@
   transform: translateX(-50%) translateY(0);
 }
 
-/* an unused slot, watermarked like a console with empty channels */
-.wii-channel-empty {
-  position: relative;
-  aspect-ratio: 12 / 7;
-  width: 100%;
-}
-
+/* an unfilled slot */
 .wii-channel-empty .wii-channel-face {
-  background: linear-gradient(to bottom, var(--wii-empty-top) 0%, var(--wii-empty-bot) 100%);
+  background: linear-gradient(
+    to bottom,
+    var(--wii-empty-top) 0%,
+    var(--wii-empty-mid) 48%,
+    var(--wii-empty-bot) 100%
+  );
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.75),
-    inset 0 0 0 2px #cfd2d6,
-    0 1px 3px rgba(120, 128, 136, 0.14);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.6),
+    inset 0 0 0 2px #c6c6c6,
+    0 1px 2px rgba(120, 124, 130, 0.12);
 }
 
 .wii-empty-mark {
@@ -255,47 +283,66 @@
   inset: 0;
   display: grid;
   place-items: center;
-  font-size: clamp(14px, 2.4vw, 26px);
-  letter-spacing: -0.03em;
+  font-size: clamp(13px, 1.9vw, 24px);
+  letter-spacing: -0.04em;
   color: var(--wii-empty-mark);
   user-select: none;
 }
 
-/* --------------------------------------------------- page arrows */
+/* --------------------------------------------------------- page arrows */
 
 .wii-arrow {
   display: grid;
   place-items: center;
-  width: 26px;
-  height: 58px;
+  width: 100%;
   border: 0;
   padding: 0;
   background: none;
-  color: var(--wii-blue);
+  color: var(--wii-blue-bright);
   cursor: none;
   transition: transform 140ms ease, opacity 140ms ease;
 }
 
 .wii-arrow:hover:not(:disabled) {
-  transform: scale(1.18);
-  color: var(--wii-blue-deep);
+  transform: scale(1.2);
 }
 
 .wii-arrow:disabled {
-  opacity: 0.22;
+  opacity: 0.2;
 }
 
-/* ------------------------------------------------------- the footer */
+/* ------------------------------------------------------------ the footer */
 
-/* The white swoop is drawn as SVG; this just stacks above the room. */
 .wii-footer {
   position: relative;
   flex-shrink: 0;
-  pointer-events: none;
+  /* 65 of 236 in the reference */
+  height: calc(27.5 * var(--wii-u));
+  min-height: 78px;
 }
 
-.wii-footer > * {
-  pointer-events: auto;
+/* row one at y=19, rows pitched 50 apart, 3-unit gutter */
+.wii-grid {
+  padding-top: calc(8.05 * var(--wii-u));
+  row-gap: calc(1.27 * var(--wii-u));
+  column-gap: var(--wii-gutter);
+}
+
+/* the two ends: 39 across, centres on y=199 */
+.wii-end {
+  height: calc(16.5 * var(--wii-u));
+  width: calc(16.5 * var(--wii-u));
+  min-height: 34px;
+  min-width: 34px;
+  border-radius: 999px;
+  font-size: calc(4.6 * var(--wii-u));
+}
+
+.wii-slot-btn {
+  height: calc(7 * var(--wii-u));
+  width: calc(9.6 * var(--wii-u));
+  min-height: 18px;
+  min-width: 24px;
 }
 
 .wii-footer-shape {
@@ -306,16 +353,15 @@
   pointer-events: none;
 }
 
-/* the big circular buttons at either end of the footer */
+/* the two ends of the footer */
 .wii-circle {
   place-items: center;
-  border-radius: 999px;
   border: 0;
-  background: linear-gradient(to bottom, #ffffff 0%, #f4f5f7 46%, #dfe2e6 100%);
+  background: linear-gradient(to bottom, #ffffff 0%, #f0f0f0 44%, #dcdcdc 100%);
   box-shadow:
     inset 0 0 0 1px #ffffff,
-    inset 0 0 0 2.5px var(--wii-bar-line),
-    0 2px 5px rgba(120, 128, 136, 0.35);
+    inset 0 0 0 3px var(--wii-blue),
+    0 2px 5px rgba(120, 124, 130, 0.4);
   color: var(--wii-ink);
   cursor: none;
   transition:
@@ -327,50 +373,47 @@
 .wii-circle:hover,
 .wii-circle:focus-visible {
   outline: none;
-  transform: scale(1.06);
+  transform: scale(1.05);
   color: var(--wii-blue-deep);
   box-shadow:
     inset 0 0 0 1px #ffffff,
-    inset 0 0 0 2.5px var(--wii-blue),
-    0 0 14px var(--wii-blue-glow),
-    0 2px 6px rgba(120, 128, 136, 0.35);
+    inset 0 0 0 3px var(--wii-blue),
+    0 0 18px var(--wii-blue-glow),
+    0 2px 6px rgba(120, 124, 130, 0.4);
 }
 
 .wii-circle:active {
   transform: scale(0.96);
 }
 
-/* the clock block in the middle of the footer */
+/* the clock block, centred in the dip */
 .wii-clock-time {
-  font-size: clamp(26px, 4.4vw, 46px);
+  font-size: clamp(24px, 4.6vw, 52px);
   line-height: 1;
   color: var(--wii-clock);
-  letter-spacing: 0.01em;
 }
 
 .wii-clock-ampm {
-  font-size: clamp(10px, 1.4vw, 15px);
+  font-size: clamp(9px, 1.3vw, 15px);
   color: var(--wii-clock);
 }
 
 .wii-clock-date {
-  font-size: clamp(11px, 1.5vw, 16px);
-  color: var(--wii-ink-soft);
+  font-size: clamp(10px, 1.5vw, 17px);
+  color: var(--wii-clock);
 }
 
-/* small SD-slot style button beside the left circle */
+/* the small slot button beside the left circle */
 .wii-slot {
   display: grid;
   place-items: center;
-  width: 30px;
-  height: 24px;
   border: 0;
   border-radius: 4px;
-  background: linear-gradient(to bottom, #ffffff, #e7e9ec);
+  background: linear-gradient(to bottom, #ffffff, #e6e6e6);
   box-shadow:
     inset 0 0 0 1px #ffffff,
-    inset 0 0 0 1.5px var(--wii-bar-line),
-    0 1px 3px rgba(120, 128, 136, 0.3);
+    inset 0 0 0 1.5px #bcbcbc,
+    0 1px 3px rgba(120, 124, 130, 0.32);
   color: var(--wii-ink);
   cursor: none;
   transition: transform 130ms ease, color 130ms ease, box-shadow 130ms ease;
@@ -384,7 +427,7 @@
   box-shadow:
     inset 0 0 0 1px #ffffff,
     inset 0 0 0 1.5px var(--wii-blue),
-    0 1px 4px rgba(120, 128, 136, 0.3);
+    0 1px 4px rgba(120, 124, 130, 0.32);
 }
 
 /* --------------------------------------------- buttons inside channels */
@@ -392,11 +435,11 @@
 .wii-oval {
   place-items: center;
   border-radius: 999px;
-  background: linear-gradient(to bottom, #ffffff 0%, #f4f5f7 48%, #dfe2e6 100%);
+  background: linear-gradient(to bottom, #ffffff 0%, #f2f2f2 48%, #dedede 100%);
   box-shadow:
     inset 0 0 0 1px #ffffff,
-    inset 0 0 0 2px var(--wii-bar-line),
-    0 2px 5px rgba(120, 128, 136, 0.32);
+    inset 0 0 0 2px #bcbcbc,
+    0 2px 5px rgba(120, 124, 130, 0.32);
   color: var(--wii-ink);
   cursor: none;
   border: 0;
@@ -415,14 +458,13 @@
     inset 0 0 0 1px #ffffff,
     inset 0 0 0 2px var(--wii-blue),
     0 0 14px var(--wii-blue-glow),
-    0 2px 6px rgba(120, 128, 136, 0.32);
+    0 2px 6px rgba(120, 124, 130, 0.32);
 }
 
 .wii-oval:active {
   transform: scale(0.96);
 }
 
-/* the photo viewer's own controls: dark discs, legible on any photo */
 .wii-viewer-btn {
   place-items: center;
   border-radius: 999px;
@@ -475,10 +517,10 @@
   padding: 3px 11px;
   font-size: 12px;
   color: var(--wii-blue-deep);
-  background: linear-gradient(to bottom, #ffffff, #e2f2fa);
+  background: linear-gradient(to bottom, #ffffff, #e1f3fb);
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.9),
-    inset 0 0 0 1.5px #b3ddf0;
+    inset 0 0 0 1.5px #ace0f4;
 }
 
 /* --------------------------------------------------------- the pointer */
@@ -559,7 +601,7 @@
 
 .wii-scroll {
   scrollbar-width: thin;
-  scrollbar-color: #c2c7cc transparent;
+  scrollbar-color: #c0c0c0 transparent;
 }
 
 .wii-scroll::-webkit-scrollbar {
@@ -567,12 +609,12 @@
 }
 
 .wii-scroll::-webkit-scrollbar-track {
-  background: rgba(205, 210, 215, 0.35);
+  background: rgba(205, 205, 205, 0.35);
   border-radius: 999px;
 }
 
 .wii-scroll::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #dfe3e7, #b4bcc3);
+  background: linear-gradient(to bottom, #dedede, #b2b2b2);
   border-radius: 999px;
   border: 2px solid transparent;
   background-clip: padding-box;

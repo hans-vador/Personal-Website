@@ -35,9 +35,9 @@ function Clock() {
           <span className="animate-pulse">:</span>
           {mins}
         </span>
-        <span className="wii-clock-ampm pb-1">{h24 < 12 ? "AM" : "PM"}</span>
+        <span className="wii-clock-ampm pb-[0.35em]">{h24 < 12 ? "AM" : "PM"}</span>
       </div>
-      <span className="wii-clock-date mt-1.5">
+      <span className="wii-clock-date mt-[0.45em]">
         {DAYS[now.getDay()]} {now.getMonth() + 1}/{now.getDate()}
       </span>
     </div>
@@ -48,7 +48,7 @@ function Clock() {
 
 function SpeakerIcon({ on }: { on: boolean }) {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path
         d="M4 9.5h3.6L12 5.6v12.8L7.6 14.5H4z"
         fill="currentColor"
@@ -67,12 +67,12 @@ function SpeakerIcon({ on }: { on: boolean }) {
 
 function EnvelopeIcon() {
   return (
-    <svg width="30" height="22" viewBox="0 0 30 22" fill="none" aria-hidden="true">
-      <rect x="1.3" y="1.3" width="27.4" height="19.4" rx="3.4" stroke="currentColor" strokeWidth="2.1" />
+    <svg width="46%" viewBox="0 0 30 21" fill="none" aria-hidden="true">
+      <rect x="1.2" y="1.2" width="27.6" height="18.6" rx="3.2" stroke="currentColor" strokeWidth="2" />
       <path
-        d="M2.6 3.4 15 12.6 27.4 3.4"
+        d="M2.5 3.2 15 12.2 27.5 3.2"
         stroke="currentColor"
-        strokeWidth="2.1"
+        strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -82,30 +82,35 @@ function EnvelopeIcon() {
 
 function ArrowIcon({ dir }: { dir: "left" | "right" }) {
   return (
-    <svg width="20" height="30" viewBox="0 0 20 30" aria-hidden="true">
-      <path d={dir === "left" ? "M15 2 3 15l12 13z" : "M5 2l12 13L5 28z"} fill="currentColor" />
+    <svg width="62%" viewBox="0 0 20 32" aria-hidden="true">
+      <path d={dir === "left" ? "M16 1 2 16l14 15z" : "M4 1l14 15L4 31z"} fill="currentColor" />
     </svg>
   )
 }
 
-/* The swooping white footer with its cyan top edge. */
+/**
+ * The footer's top edge. Traced from the reference: level at y=171 out to
+ * x=72, easing down to y=196 by x=144, flat across the middle to x=272,
+ * then back up by x=352. Expressed here in a 420x65 box, so 171 is 0.
+ */
 function FooterShape() {
+  const edge = "M0 0 L72 0 C 108 0 108 25 144 25 L272 25 C 312 25 312 0 352 0 L420 0"
   return (
-    <svg
-      className="wii-footer-shape"
-      viewBox="0 0 1000 150"
-      preserveAspectRatio="none"
-      aria-hidden="true"
-    >
+    <svg className="wii-footer-shape" viewBox="0 0 420 65" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="wiiBarFill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="var(--wii-bar-top)" />
+          <stop offset="45%" stopColor="var(--wii-bar-mid)" />
+          <stop offset="70%" stopColor="var(--wii-bar-mid)" />
+          <stop offset="100%" stopColor="var(--wii-bar-bot)" />
+        </linearGradient>
+      </defs>
+      <path d={`${edge} L420 65 L0 65 Z`} fill="url(#wiiBarFill)" />
       <path
-        d="M0 74 C 250 74 250 20 500 20 C 750 20 750 74 1000 74 L1000 150 L0 150 Z"
-        fill="var(--wii-bar)"
-      />
-      <path
-        d="M0 74 C 250 74 250 20 500 20 C 750 20 750 74 1000 74"
+        d={edge}
         fill="none"
         stroke="var(--wii-blue)"
-        strokeWidth="3"
+        strokeWidth="2.5"
         vectorEffect="non-scaling-stroke"
       />
     </svg>
@@ -176,19 +181,24 @@ export function WiiMenu() {
       <div className="fixed inset-0 flex flex-col">
         <div className="wii-room" aria-hidden="true" />
 
-        {/* the channel grid, flanked by page arrows */}
-        <main className="relative z-10 flex min-h-0 flex-1 items-stretch gap-1 px-1 pt-3 sm:gap-2 sm:px-3">
-          <button
-            type="button"
-            className="wii-arrow my-auto shrink-0"
-            onClick={() => turnPage(-1)}
-            disabled={page === 0}
-            aria-label="Previous page"
-          >
-            <ArrowIcon dir="left" />
-          </button>
+        {/* The grid sits in the reference's 8.33% side margins, with the
+            page arrows living inside those margins. */}
+        <main className="relative z-10 flex min-h-0 flex-1 items-stretch">
+          <div className="flex w-[var(--wii-margin)] shrink-0 items-center justify-center">
+            <button
+              type="button"
+              className="wii-arrow"
+              onClick={() => turnPage(-1)}
+              disabled={page === 0}
+              aria-label="Previous page"
+            >
+              <ArrowIcon dir="left" />
+            </button>
+          </div>
 
-          <div className="wii-scroll grid min-h-0 flex-1 auto-rows-min grid-cols-2 content-center gap-2 overflow-y-auto px-1 py-2 sm:grid-cols-3 sm:gap-2.5 lg:grid-cols-4">
+          {/* Always four across from tablet up, as the console is. The top
+              padding puts row one at y=19 of 236, per the reference. */}
+          <div className="wii-scroll grid min-h-0 flex-1 auto-rows-min grid-cols-2 wii-grid content-start overflow-y-auto sm:grid-cols-4">
             {pageChannels.map((c) => (
               <ChannelTile
                 key={c.id}
@@ -204,86 +214,83 @@ export function WiiMenu() {
             ))}
           </div>
 
-          <button
-            type="button"
-            className="wii-arrow my-auto shrink-0"
-            onClick={() => turnPage(1)}
-            disabled={page >= pages - 1}
-            aria-label="Next page"
-          >
-            <ArrowIcon dir="right" />
-          </button>
-        </main>
-
-        {/* the footer: swoop, corner buttons, clock */}
-        <footer className="wii-footer relative z-10 h-[118px] sm:h-[150px]">
-          <FooterShape />
-
-          {/* Buttons ride the curve: pinned to the ends, centred on the
-              white band rather than tucked into a corner. */}
-          <div className="absolute inset-x-0 bottom-0 top-[38%] flex items-center justify-between px-3 sm:px-5">
-            {/* left cluster: the menu button and the sound slot */}
-            <div className="flex items-center gap-2 sm:gap-3">
-              <button
-                type="button"
-                className="wii-circle h-[52px] w-[52px] text-sm sm:h-[68px] sm:w-[68px] sm:text-base"
-                onClick={(e) => openFrom("about", e.currentTarget.getBoundingClientRect())}
-                aria-label="About Me"
-                title="About Me"
-              >
-                Hans
-              </button>
-
-              <button
-                type="button"
-                className="wii-slot"
-                onClick={() => {
-                  toggleAudio()
-                  play("toggle")
-                }}
-                aria-pressed={!muted}
-                aria-label={muted ? "Turn sound on" : "Turn sound off"}
-                title={muted ? "Sound off" : "Sound on"}
-              >
-                <SpeakerIcon on={!muted} />
-              </button>
-            </div>
-
-            {/* centre: clock, with the page dots tucked beneath */}
-            <div className="pointer-events-none absolute inset-x-0 top-1/2 flex -translate-y-1/2 flex-col items-center">
-              <Clock />
-              {pages > 1 && (
-                <div className="pointer-events-auto mt-2 flex items-center gap-1.5">
-                  {Array.from({ length: pages }).map((_, i) => (
-                    <button
-                      key={i}
-                      type="button"
-                      onClick={() => {
-                        setPage(i)
-                        play("page")
-                      }}
-                      aria-label={`Page ${i + 1}`}
-                      className="h-2 w-2 rounded-full transition-all"
-                      style={{
-                        background: i === page ? "var(--wii-blue)" : "#c8ccd1",
-                        transform: i === page ? "scale(1.3)" : "scale(1)",
-                      }}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* right: the mail button */}
+          <div className="flex w-[var(--wii-margin)] shrink-0 items-center justify-center">
             <button
               type="button"
-              className="wii-circle h-[52px] w-[52px] sm:h-[68px] sm:w-[68px]"
-              onClick={(e) => openFrom("contact", e.currentTarget.getBoundingClientRect())}
-              aria-label="Contact"
-              title="Contact"
+              className="wii-arrow"
+              onClick={() => turnPage(1)}
+              disabled={page >= pages - 1}
+              aria-label="Next page"
             >
-              <EnvelopeIcon />
+              <ArrowIcon dir="right" />
             </button>
+          </div>
+        </main>
+
+        {/* the footer: the swoop, its two ends, and the clock in the dip */}
+        <footer className="wii-footer relative z-10">
+          <FooterShape />
+
+          {/* Both ends are circles of ~39 diameter centred at x=38 and x=382
+              of 420, on y=199 of 236 — that is 43% down the footer. */}
+          <button
+            type="button"
+            className="wii-circle wii-end absolute left-[9.05%] top-[43%] -translate-x-1/2 -translate-y-1/2"
+            onClick={(e) => openFrom("about", e.currentTarget.getBoundingClientRect())}
+            aria-label="About Me"
+            title="About Me"
+          >
+            Hans
+          </button>
+
+          {/* the small slot beside it, where the console shows its card slot */}
+          <button
+            type="button"
+            className="wii-slot wii-slot-btn absolute left-[20%] top-[46%] -translate-x-1/2 -translate-y-1/2"
+            onClick={() => {
+              toggleAudio()
+              play("toggle")
+            }}
+            aria-pressed={!muted}
+            aria-label={muted ? "Turn sound on" : "Turn sound off"}
+            title={muted ? "Sound off" : "Sound on"}
+          >
+            <SpeakerIcon on={!muted} />
+          </button>
+
+          <button
+            type="button"
+            className="wii-circle wii-end absolute right-[9.05%] top-[43%] translate-x-1/2 -translate-y-1/2"
+            onClick={(e) => openFrom("contact", e.currentTarget.getBoundingClientRect())}
+            aria-label="Contact"
+            title="Contact"
+          >
+            <EnvelopeIcon />
+          </button>
+
+          {/* the clock, centred in the dipped middle of the bar */}
+          <div className="pointer-events-none absolute inset-x-0 top-[62%] flex -translate-y-1/2 flex-col items-center">
+            <Clock />
+            {pages > 1 && (
+              <div className="pointer-events-auto mt-2 flex items-center gap-1.5">
+                {Array.from({ length: pages }).map((_, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => {
+                      setPage(i)
+                      play("page")
+                    }}
+                    aria-label={`Page ${i + 1}`}
+                    className="h-2 w-2 rounded-full transition-all"
+                    style={{
+                      background: i === page ? "var(--wii-blue)" : "#b6b8be",
+                      transform: i === page ? "scale(1.3)" : "scale(1)",
+                    }}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </footer>
       </div>
