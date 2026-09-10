@@ -22,19 +22,25 @@ export function ChannelTile({ label, preview, onOpen, onHover, launching }: Chan
       aria-label={`Open ${label}`}
       style={launching ? { visibility: "hidden" } : undefined}
     >
+      {/* the little name tab that rises above a channel under the pointer */}
+      <span className="wii-channel-tip">{label}</span>
+
       <span className="wii-channel-face">
-        <span className="absolute inset-0 bottom-[27px] overflow-hidden">{preview}</span>
+        <span className="absolute inset-0 bottom-[20px] overflow-hidden">{preview}</span>
       </span>
-      <span className="wii-channel-label wii-title truncate">{label}</span>
+
+      <span className="wii-channel-label truncate">{label}</span>
     </button>
   )
 }
 
-/** A dead slot, kept so the grid keeps its console-like rhythm. */
+/** A dead slot, watermarked the way an unfilled console channel is. */
 export function EmptyChannel() {
   return (
-    <div className="wii-channel wii-channel-empty wii-gloss" aria-hidden="true">
-      <span className="wii-channel-face" />
+    <div className="wii-channel-empty wii-gloss" aria-hidden="true">
+      <span className="wii-channel-face">
+        <span className="wii-empty-mark">Wii</span>
+      </span>
     </div>
   )
 }

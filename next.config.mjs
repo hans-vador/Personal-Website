@@ -3,6 +3,8 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  // The dev badge sits exactly where the menu's left button is.
+  devIndicators: false,
   images: {
     // The originals in /public/work run to tens of megabytes each, so the
     // built-in optimizer does the resizing rather than shipping them raw.
