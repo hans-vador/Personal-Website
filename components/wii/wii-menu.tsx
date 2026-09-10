@@ -48,7 +48,7 @@ function Clock() {
 
 function SpeakerIcon({ on }: { on: boolean }) {
   return (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg width="52%" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path
         d="M4 9.5h3.6L12 5.6v12.8L7.6 14.5H4z"
         fill="currentColor"

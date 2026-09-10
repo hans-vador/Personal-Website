@@ -26,8 +26,8 @@ export function MonogramPreview({ initials, hue }: { initials: string; hue: numb
       }}
     >
       <span
-        className="text-[clamp(16px,2.3vw,30px)] leading-none tracking-tight"
-        style={{ color: `hsl(${hue} 55% 30%)` }}
+        className="leading-none tracking-tight"
+        style={{ color: `hsl(${hue} 55% 30%)`, fontSize: "calc(9 * var(--wii-u))" }}
       >
         {initials}
       </span>

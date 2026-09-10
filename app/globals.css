@@ -229,7 +229,7 @@
   bottom: 0;
   z-index: 4;
   padding: 9px 5px 3px;
-  font-size: clamp(8px, 0.78vw, 11px);
+  font-size: max(8px, calc(2.9 * var(--wii-u)));
   line-height: 1.1;
   color: var(--wii-ink-strong);
   text-align: center;
@@ -245,7 +245,7 @@
   transform: translateX(-50%) translateY(3px);
   padding: 2px 9px;
   border-radius: 4px;
-  font-size: 11px;
+  font-size: max(10px, calc(2.7 * var(--wii-u)));
   white-space: nowrap;
   color: var(--wii-ink-strong);
   background: linear-gradient(to bottom, #fdfdfd, #e7e7e7);
@@ -283,7 +283,7 @@
   inset: 0;
   display: grid;
   place-items: center;
-  font-size: clamp(13px, 1.9vw, 24px);
+  font-size: calc(5.5 * var(--wii-u));
   letter-spacing: -0.04em;
   color: var(--wii-empty-mark);
   user-select: none;
@@ -388,18 +388,18 @@
 
 /* the clock block, centred in the dip */
 .wii-clock-time {
-  font-size: clamp(24px, 4.6vw, 52px);
+  font-size: calc(7.9 * var(--wii-u));
   line-height: 1;
   color: var(--wii-clock);
 }
 
 .wii-clock-ampm {
-  font-size: clamp(9px, 1.3vw, 15px);
+  font-size: calc(2.5 * var(--wii-u));
   color: var(--wii-clock);
 }
 
 .wii-clock-date {
-  font-size: clamp(10px, 1.5vw, 17px);
+  font-size: calc(3.1 * var(--wii-u));
   color: var(--wii-clock);
 }
 
