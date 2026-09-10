@@ -1,6 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useState } from "react"
+import { links } from "@/lib/site-content"
 import { CHANNELS_PER_PAGE, channels, getChannel } from "./channels"
 import { ChannelTile, EmptyChannel } from "./channel-tile"
 import { ChannelView } from "./channel-view"
@@ -76,6 +77,22 @@ function EnvelopeIcon() {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+    </svg>
+  )
+}
+
+function GithubIcon() {
+  return (
+    <svg width="52%" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.55v-2.1c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.12 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .3.2.66.8.55A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z" />
+    </svg>
+  )
+}
+
+function LinkedinIcon() {
+  return (
+    <svg width="50%" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M6.94 5.5a2.44 2.44 0 1 1-4.88 0 2.44 2.44 0 0 1 4.88 0zM2.4 9.3h4.3V22H2.4zM14.3 9c-2.06 0-3.06 1.06-3.6 1.87V9.3H6.4c.06 1.2 0 12.7 0 12.7h4.3v-7.05c0-.38.03-.77.14-1.04.31-.77 1-1.57 2.18-1.57 1.53 0 2.15 1.16 2.15 2.87V22h4.3v-7.28c0-3.94-2.13-5.72-4.97-5.72z" />
     </svg>
   )
 }
@@ -243,10 +260,26 @@ export function WiiMenu() {
             Hans
           </button>
 
-          {/* the small slot beside it, where the console shows its card slot */}
+          {/* LinkedIn pairs off the left corner, GitHub off the right, both
+              at x=80 and x=340 where the bar's edge is still level, so they
+              seat exactly like the corner buttons without touching the curve. */}
+          <a
+            href={links.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="wii-circle wii-end absolute left-[19.05%] top-[43%] -translate-x-1/2 -translate-y-1/2"
+            onMouseEnter={() => play("hover")}
+            onClick={() => play("select")}
+            aria-label="LinkedIn profile"
+            title="LinkedIn"
+          >
+            <LinkedinIcon />
+          </a>
+
+          {/* the small slot, where the console shows its card slot */}
           <button
             type="button"
-            className="wii-slot wii-slot-btn absolute left-[20%] top-[46%] -translate-x-1/2 -translate-y-1/2"
+            className="wii-slot wii-slot-btn absolute left-[29.05%] top-[60%] -translate-x-1/2 -translate-y-1/2"
             onClick={() => {
               toggleAudio()
               play("toggle")
@@ -257,6 +290,19 @@ export function WiiMenu() {
           >
             <SpeakerIcon on={!muted} />
           </button>
+
+          <a
+            href={links.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="wii-circle wii-end absolute right-[19.05%] top-[43%] translate-x-1/2 -translate-y-1/2"
+            onMouseEnter={() => play("hover")}
+            onClick={() => play("select")}
+            aria-label="GitHub profile"
+            title="GitHub"
+          >
+            <GithubIcon />
+          </a>
 
           <button
             type="button"
