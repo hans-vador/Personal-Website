@@ -10,7 +10,15 @@
 import { mkdir, readdir, stat, writeFile, access } from "node:fs/promises"
 import { dirname, extname, join, relative } from "node:path"
 import { fileURLToPath } from "node:url"
-import sharp from "sharp"
+
+// Loaded only when there is something to convert. The outputs are committed,
+// so a deploy build normally finds every file present and never needs sharp
+// at all; a build should not fail on loading a native module it won't use.
+let sharpModule = null
+async function getSharp() {
+  if (!sharpModule) sharpModule = (await import("sharp")).default
+  return sharpModule
+}
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..")
 const SRC = join(root, "public", "work")
@@ -71,6 +79,7 @@ for await (const file of walk(SRC)) {
   await mkdir(dirname(out), { recursive: true })
 
   if (isAnimated) {
+    const sharp = await getSharp()
     const buf = await sharp(file, { animated: true })
       .webp({ quality: 75, effort: 4 })
       .toBuffer()
@@ -81,6 +90,7 @@ for await (const file of walk(SRC)) {
     continue
   }
 
+  const sharp = await getSharp()
   const buf = await sharp(file)
     .rotate() // honour EXIF orientation before it is stripped
     .resize({ width: MAX_EDGE, height: MAX_EDGE, fit: "inside", withoutEnlargement: true })
