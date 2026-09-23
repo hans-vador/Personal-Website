@@ -1,7 +1,8 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { links } from "@/lib/site-content"
+import Link from "next/link"
+import { about, links } from "@/lib/site-content"
 import { CHANNELS_PER_PAGE, channels, getChannel } from "./channels"
 import { ChannelTile, EmptyChannel } from "./channel-tile"
 import { ChannelView } from "./channel-view"
@@ -198,6 +199,14 @@ export function WiiMenu() {
       <div className="fixed inset-0 flex flex-col">
         <div className="wii-room" aria-hidden="true" />
 
+        <header className="portfolio-header relative z-10">
+          <div><p className="text-xs uppercase tracking-[0.16em]">University of Michigan · Engineering portfolio</p><h1 className="wii-title text-2xl sm:text-3xl">{about.name}</h1><p className="text-sm">Mechanical design, robotics & embedded systems</p></div>
+          <nav aria-label="Quick links" className="flex flex-wrap gap-2">
+            <Link href="/projects" className="wii-oval px-5 py-3 text-sm">Explore projects →</Link>
+            <a href={links.linkedin} className="wii-oval px-5 py-3 text-sm">LinkedIn</a>
+            <a href={`mailto:${links.email}`} className="wii-oval px-5 py-3 text-sm">Contact</a>
+          </nav>
+        </header>
         {/* The grid sits in the reference's 8.33% side margins, with the
             page arrows living inside those margins. */}
         <main className="relative z-10 flex min-h-0 flex-1 items-stretch">

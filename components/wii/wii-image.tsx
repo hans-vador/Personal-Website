@@ -22,7 +22,7 @@ export function optimized(src: string): string {
   const ext = src.slice(dot).toLowerCase()
   const moved = `/work-opt/${src.slice("/work/".length)}`
   if (ext === ".gif") return moved
-  if (RESIZED.has(ext)) return `${moved.slice(0, moved.lastIndexOf("."))}.jpg`
+  if (RESIZED.has(ext)) return `${moved.slice(0, moved.lastIndexOf("."))}.webp`
   return src
 }
 

@@ -187,7 +187,6 @@ export const hexapod: Project = {
       ],
     },
   ],
-  demo: "https://youtube.com",
   github: "https://github.com/hans-vador/SpiderBot",
 }
 

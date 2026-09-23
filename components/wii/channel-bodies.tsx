@@ -16,6 +16,7 @@ import {
   type ProcessImage,
   type Project,
 } from "@/lib/site-content"
+import { ProjectSummary } from "./project-summary"
 import { Lightbox } from "./lightbox"
 import { FillImage, FlowImage } from "./wii-image"
 
@@ -183,19 +184,19 @@ export function HexapodBody() {
         </div>
       </Panel>
 
+      <ProjectSummary project={p} />
+
       <div className="wii-plate overflow-hidden p-2">
         <div className="relative h-[46vh] w-full overflow-hidden rounded-lg">
           <FillImage src={p.image} alt={p.title} sizes={PANEL_SIZES} priority />
         </div>
       </div>
 
-      <Panel>
-        <SectionTitle>Overview</SectionTitle>
-        <p className="leading-relaxed text-[var(--wii-ink)]">{p.fullDescription}</p>
-      </Panel>
 
-      <Panel>
-        <SectionTitle>Development Process</SectionTitle>
+
+      <details className="wii-plate p-5 sm:p-6">
+        <summary className="wii-title cursor-pointer text-lg">Development process & technical details</summary>
+        <div className="mt-5">
         <div className="space-y-10">
           {p.process.map((step, idx) => (
             <div key={step.title} className="flex gap-4">
@@ -261,7 +262,7 @@ export function HexapodBody() {
 
                 {step.video && (
                   <div className="mt-4 aspect-video overflow-hidden rounded-lg">
-                    <iframe
+                    <iframe loading="lazy"
                       src={step.video}
                       className="h-full w-full"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -274,7 +275,8 @@ export function HexapodBody() {
             </div>
           ))}
         </div>
-      </Panel>
+        </div>
+      </details>
 
       {p.github && (
         <Panel>
@@ -294,7 +296,7 @@ function isRemote(src: string) {
 }
 
 export function VolumeControlBody() {
-  const [v, setV] = useState(0)
+  const [v, setV] = useState(volumeVersions.length - 1)
   const version = volumeVersions[v]
 
   return (
@@ -313,16 +315,15 @@ export function VolumeControlBody() {
         </div>
       </Panel>
 
+      <ProjectSummary project={volumeControl} />
+
       <div className="wii-plate overflow-hidden p-2">
         <div className="relative h-[46vh] w-full overflow-hidden rounded-lg">
           <FillImage src={volumeControl.image} alt={volumeControl.title} sizes={PANEL_SIZES} priority />
         </div>
       </div>
 
-      <Panel>
-        <SectionTitle>Overview</SectionTitle>
-        <p className="leading-relaxed text-[var(--wii-ink)]">{volumeControl.fullDescription}</p>
-      </Panel>
+
 
       {/* Version selector, styled like a console channel switcher. */}
       <Panel>
@@ -368,7 +369,7 @@ export function VolumeControlBody() {
                   <FlowImage src={m.src} alt={m.title} sizes={HALF_PANEL_SIZES} />
                 ) : isRemote(m.src) ? (
                   <div className="aspect-video">
-                    <iframe
+                    <iframe loading="lazy"
                       src={m.src}
                       className="h-full w-full"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -377,7 +378,7 @@ export function VolumeControlBody() {
                     />
                   </div>
                 ) : (
-                  <video src={m.src} controls playsInline className="h-auto w-full" preload="metadata" />
+                  <video src={m.src} controls playsInline className="h-auto w-full" preload="none" />
                 )}
                 <figcaption className="wii-sub border-t border-[var(--wii-plate-line)] p-3 text-center text-sm">
                   {m.title}
@@ -480,7 +481,7 @@ export function VideosBody() {
           <h3 className="wii-title text-xl">{video.title}</h3>
           <p className="mt-2 leading-relaxed text-[var(--wii-ink)]">{video.description}</p>
           <div className="mt-4 aspect-video overflow-hidden rounded-lg bg-black/5">
-            <iframe
+            <iframe loading="lazy"
               src={video.videoUrl}
               className="h-full w-full"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

@@ -1,6 +1,5 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import { about, experiences, photoAlbums, videoProjects } from "@/lib/site-content"
 import { FillImage } from "./wii-image"
 
@@ -37,29 +36,9 @@ export function MonogramPreview({ initials, hue }: { initials: string; hue: numb
 
 /* Photo channel: cross-fades through a handful of real shots. */
 export function SlideshowPreview({ images }: { images: string[] }) {
-  const [i, setI] = useState(0)
-
-  useEffect(() => {
-    if (images.length < 2) return
-    const t = window.setInterval(() => setI((n) => (n + 1) % images.length), 2600)
-    return () => window.clearInterval(t)
-  }, [images.length])
-
-  // Every frame stays mounted. Swapping them in and out faster than the
-  // lazy-loader can react leaves the images with no source at all.
-  return (
-    <span className="relative block h-full w-full bg-[#dbe6ee]">
-      {images.map((src, idx) => (
-        <span
-          key={src}
-          className="absolute inset-0 transition-opacity duration-[900ms]"
-          style={{ opacity: idx === i ? 1 : 0 }}
-        >
-          <FillImage src={src} alt="" sizes={TILE_SIZES} priority={idx === 0} />
-        </span>
-      ))}
-    </span>
-  )
+  return <span className="relative block h-full w-full bg-[#dbe6ee]">
+    {images[0] && <FillImage src={images[0]} alt="Photography portfolio" sizes={TILE_SIZES} />}
+  </span>
 }
 
 /* Video channel: a play badge over a dark film-strip field. */

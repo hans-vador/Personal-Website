@@ -636,3 +636,18 @@
     transition: none;
   }
 }
+
+/* Portfolio navigation retains the console's soft plates and cyan accents. */
+.portfolio-header { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1.2rem max(5%, 1rem); flex-shrink:0; border-bottom:1px solid #c3d5df; background:linear-gradient(#fff, #edf4f8); color:#455764; }
+.project-document { background:radial-gradient(ellipse at top, #fff, #e5edf2); color:#45515c; }
+.project-document, .project-document * { cursor:auto; }
+.project-document a, .project-document button { cursor:pointer; }
+:root { --wii-ink:#525d67; --wii-blue-deep:#086d98; }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline:3px solid #087aa5; outline-offset:4px; }
+.portfolio-header a { text-decoration:none; }
+@media(max-width:640px) { .portfolio-header { align-items:flex-start; flex-direction:column; padding:1rem; } .portfolio-header nav { gap:.5rem; } .wii-grid { padding-top:1rem; } }
+@media(prefers-reduced-motion:reduce) { *, *::before, *::after { animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important; } }
+
+.wii-grid { padding-top: 1.25rem; padding-bottom: 1.25rem; }
+.wii-footer { height: clamp(90px, 20vh, 150px); }
+.wii-end { height: clamp(44px, 12vh, 92px); width: clamp(44px, 12vh, 92px); }

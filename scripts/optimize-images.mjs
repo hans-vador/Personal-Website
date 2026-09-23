@@ -20,8 +20,8 @@ const IMAGE_EXT = new Set([".jpg", ".jpeg", ".png", ".webp"])
 // GIFs are animations here, so they are copied through by sharp unchanged.
 const PASSTHROUGH_EXT = new Set([".gif"])
 
-const MAX_EDGE = 2200
-const QUALITY = 80
+const MAX_EDGE = 1920
+const QUALITY = 78
 
 async function exists(p) {
   try {
@@ -53,8 +53,8 @@ for await (const file of walk(SRC)) {
   if (!isImage && !isPass) continue
 
   const rel = relative(SRC, file)
-  // Everything lands as .jpg except animations, which keep their format.
-  const outRel = isImage ? rel.replace(/\.[^.]+$/, ".jpg") : rel
+  // Everything lands as .webp except animations, which keep their format.
+  const outRel = isImage ? rel.replace(/\.[^.]+$/, ".webp") : rel
   const out = join(OUT, outRel)
 
   const srcStat = await stat(file)
@@ -80,7 +80,7 @@ for await (const file of walk(SRC)) {
   const buf = await sharp(file)
     .rotate() // honour EXIF orientation before it is stripped
     .resize({ width: MAX_EDGE, height: MAX_EDGE, fit: "inside", withoutEnlargement: true })
-    .jpeg({ quality: QUALITY, mozjpeg: true, progressive: true })
+    .webp({ quality: QUALITY, effort: 4 })
     .toBuffer()
 
   await writeFile(out, buf)
