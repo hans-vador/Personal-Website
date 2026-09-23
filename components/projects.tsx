@@ -85,6 +85,15 @@ export function Projects() {
     },
   ]
 
+  // A card navigates with router.push rather than a <Link>, so nothing
+  // prefetches the route. Warm it on mount so the click is instant.
+  useEffect(() => {
+    projects.forEach((p) => {
+      if ((p as any).link) router.prefetch((p as any).link)
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router])
+
   useEffect(() => {
     const observers = projectRefs.current.map((project, index) => {
       if (!project) return null

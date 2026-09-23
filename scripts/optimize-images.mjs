@@ -56,6 +56,13 @@ let copied = 0
 let bytesIn = 0
 let bytesOut = 0
 
+// The originals may one day be moved out of the repo. The committed outputs
+// are then all there is, and the build must not fail over their absence.
+if (!(await exists(SRC))) {
+  console.log("images: public/work is absent, keeping the committed public/work-opt as is")
+  process.exit(0)
+}
+
 for await (const file of walk(SRC)) {
   const ext = extname(file).toLowerCase()
   const isImage = IMAGE_EXT.has(ext)

@@ -181,6 +181,11 @@ export function Media() {
                   featured={album.featured}
                   category={album.category}
                   className="w-full"
+                  sizes={
+                    viewMode === "list"
+                      ? { main: "(max-width: 1536px) 100vw, 1500px", cell: "(max-width: 1536px) 50vw, 750px" }
+                      : undefined
+                  }
                 />
               ))}
             </div>

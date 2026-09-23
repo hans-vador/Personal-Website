@@ -19,6 +19,8 @@ interface PhotoAlbumCardProps {
     featured?: boolean
     category?: string
     className?: string
+    /** Width hints for the image optimizer; the list layout passes wider ones. */
+    sizes?: { main: string; cell: string }
 }
 
 export function PhotoAlbumCard({
@@ -31,6 +33,7 @@ export function PhotoAlbumCard({
     featured,
     category,
     className,
+    sizes,
 }: PhotoAlbumCardProps) {
     const [currentSlide, setCurrentSlide] = useState(0)
 
@@ -48,6 +51,11 @@ export function PhotoAlbumCard({
 
     const hasExternalLink = albumUrl && albumUrl.length > 0
     const showSlideshow = !hasExternalLink && localPhotos.length > 0
+
+    // Defaults describe the three-up grid; a full-width card must say so or
+    // the browser picks a 420px candidate and stretches it.
+    const mainSizes = sizes?.main ?? "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 420px"
+    const cellSizes = sizes?.cell ?? "(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 210px"
 
     return (
         <Card className={`overflow-hidden hover:border-primary/50 transition-colors h-full flex flex-col group/card ${className}`}>
@@ -74,7 +82,7 @@ export function PhotoAlbumCard({
                             src={optimized(localPhotos[currentSlide])}
                             alt={`${title} slide ${currentSlide + 1}`}
                             fill
-                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 420px"
+                            sizes={mainSizes}
                             className="object-contain transition-opacity duration-300 z-10"
                         />
 
@@ -114,7 +122,7 @@ export function PhotoAlbumCard({
                                         src={optimized(photo)}
                                         alt={`${title} preview ${i}`}
                                         fill
-                                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 210px"
+                                        sizes={cellSizes}
                                         className="object-cover"
                                     />
                                 </div>
