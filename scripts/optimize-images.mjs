@@ -17,8 +17,9 @@ const SRC = join(root, "public", "work")
 const OUT = join(root, "public", "work-opt")
 
 const IMAGE_EXT = new Set([".jpg", ".jpeg", ".png", ".webp"])
-// GIFs are animations here, so they are copied through by sharp unchanged.
-const PASSTHROUGH_EXT = new Set([".gif"])
+// GIFs are animations. Re-encoded as animated WebP they keep every frame
+// and its delay but come out roughly five times smaller than the GIF.
+const ANIMATED_EXT = new Set([".gif"])
 
 const MAX_EDGE = 1920
 const QUALITY = 78
@@ -50,12 +51,12 @@ let bytesOut = 0
 for await (const file of walk(SRC)) {
   const ext = extname(file).toLowerCase()
   const isImage = IMAGE_EXT.has(ext)
-  const isPass = PASSTHROUGH_EXT.has(ext)
-  if (!isImage && !isPass) continue
+  const isAnimated = ANIMATED_EXT.has(ext)
+  if (!isImage && !isAnimated) continue
 
   const rel = relative(SRC, file)
-  // Everything lands as .webp except animations, which keep their format.
-  const outRel = isImage ? rel.replace(/\.[^.]+$/, ".webp") : rel
+  // Everything lands as .webp, animations included.
+  const outRel = rel.replace(/\.[^.]+$/, ".webp")
   const out = join(OUT, outRel)
 
   const srcStat = await stat(file)
@@ -69,8 +70,10 @@ for await (const file of walk(SRC)) {
 
   await mkdir(dirname(out), { recursive: true })
 
-  if (isPass) {
-    const buf = await sharp(file, { animated: true }).toBuffer()
+  if (isAnimated) {
+    const buf = await sharp(file, { animated: true })
+      .webp({ quality: 75, effort: 4 })
+      .toBuffer()
     await writeFile(out, buf)
     copied++
     bytesIn += srcStat.size
@@ -92,6 +95,6 @@ for await (const file of walk(SRC)) {
 
 const mb = (n) => (n / 1048576).toFixed(1)
 console.log(
-  `images: ${converted} converted, ${copied} copied, ${skipped} up to date — ` +
+  `images: ${converted} converted, ${copied} animations, ${skipped} up to date — ` +
     `${mb(bytesIn)}MB in, ${mb(bytesOut)}MB out`,
 )

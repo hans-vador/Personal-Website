@@ -12,22 +12,10 @@ export const metadata: Metadata = {
   title: "Hans Vador",
   description: "Personal portfolio showcasing my work, experience, and projects",
   generator: "v0.app",
+  // app/icon.svg is the only icon that exists; the PNG variants listed
+  // before were never in the repo and cost three 404s on every page load.
   icons: {
-    icon: [
-      {
-        url: "/icon-light-32x32.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/icon-dark-32x32.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/icon.svg",
-        type: "image/svg+xml",
-      },
-    ],
-    apple: "/apple-icon.png",
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
   },
 }
 
