@@ -4,6 +4,8 @@ import { Badge } from "@/components/ui/badge"
 import { Image as ImageIcon, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
+import Image from "next/image"
+import { optimized } from "@/lib/optimized"
 
 interface PhotoAlbumCardProps {
     id: string
@@ -55,20 +57,25 @@ export function PhotoAlbumCard({
                     <div className="relative w-full h-full bg-black">
                         {/* Blurred Background for Fill */}
                         <div className="absolute inset-0 overflow-hidden">
-                            <img
+                            {/* Blurred to a wash, so a 64px copy is all it needs. */}
+                            <Image
                                 key={`bg-${currentSlide}`}
-                                src={localPhotos[currentSlide]}
+                                src={optimized(localPhotos[currentSlide])}
                                 alt=""
-                                className="w-full h-full object-cover blur-xl opacity-50 scale-110"
+                                fill
+                                sizes="64px"
+                                className="object-cover blur-xl opacity-50 scale-110"
                             />
                         </div>
 
                         {/* Main Image */}
-                        <img
+                        <Image
                             key={`main-${currentSlide}`}
-                            src={localPhotos[currentSlide]}
+                            src={optimized(localPhotos[currentSlide])}
                             alt={`${title} slide ${currentSlide + 1}`}
-                            className="relative w-full h-full object-contain transition-opacity duration-300 z-10"
+                            fill
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 420px"
+                            className="object-contain transition-opacity duration-300 z-10"
                         />
 
                         {/* Navigation Overlay */}
@@ -102,7 +109,14 @@ export function PhotoAlbumCard({
                         <div className="grid grid-cols-2 h-full">
                             {localPhotos.slice(0, 4).map((photo, i) => (
                                 <div key={i} className="relative w-full h-full border-[0.5px] border-background/10">
-                                    <img src={photo} alt={`${title} preview ${i}`} className="w-full h-full object-cover" />
+                                    {/* Each cell is a quarter of a card, so ~200px at desktop. */}
+                                    <Image
+                                        src={optimized(photo)}
+                                        alt={`${title} preview ${i}`}
+                                        fill
+                                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 210px"
+                                        className="object-cover"
+                                    />
                                 </div>
                             ))}
                         </div>

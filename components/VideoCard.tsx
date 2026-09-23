@@ -22,6 +22,7 @@ export function VideoCard({ title, description, videoUrl, duration, tags, featur
                         className="w-full h-full"
                         allow="autoplay"
                         allowFullScreen
+                        loading="lazy"
                         title={title}
                     />
                 ) : (

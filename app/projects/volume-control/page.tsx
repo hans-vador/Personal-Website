@@ -7,6 +7,7 @@ import { Github, ExternalLink, Download, ChevronLeft, ChevronRight, ArrowLeft, X
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
+import { optimized } from "@/lib/optimized"
 
 export default function VolumeControlProject() {
     const [currentVersion, setCurrentVersion] = useState(0)
@@ -125,10 +126,12 @@ export default function VolumeControlProject() {
                         <h1 className="text-4xl font-bold tracking-tighter">Volume Control</h1>
                         <div className="w-full flex justify-center">
                             <Image
-                                src="/work/IMG_2445.JPG"
+                                src={optimized("/work/IMG_2445.JPG")}
                                 alt="Volume Control Project"
                                 width={400}
                                 height={300}
+                                sizes="400px"
+                                priority
                                 className="rounded-lg object-cover mx-auto"
                             />
                         </div>
@@ -283,9 +286,10 @@ export default function VolumeControlProject() {
                                                     <div className="relative aspect-[4/5] bg-muted/30 flex items-center justify-center">
                                                         {m.type === "image" ? (
                                                             <Image
-                                                                src={m.src || "/placeholder.svg"}
+                                                                src={optimized(m.src || "/placeholder.svg")}
                                                                 alt={m.title}
                                                                 fill
+                                                                sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                                                                 className="object-contain p-3"
                                                             />
                                                         ) : typeof m.src === "string" && m.src.includes("drive.google.com") ? (
@@ -294,6 +298,7 @@ export default function VolumeControlProject() {
                                                                 className="w-full h-full p-2"
                                                                 allow="autoplay"
                                                                 allowFullScreen
+                                                                loading="lazy"
                                                                 title={m.title}
                                                             />
                                                         ) : (

@@ -8,6 +8,8 @@ import { Github, X } from "lucide-react"
 import { TiltCard } from "@/components/ui/tilt-card"
 import { TrackingField } from "@/components/tracking-field"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
+import { optimized } from "@/lib/optimized"
 
 export function Projects() {
   const [selectedProject, setSelectedProject] = useState<number | null>(null)
@@ -146,10 +148,12 @@ export function Projects() {
                   }}
                 >
                   <div className="relative overflow-hidden rounded-t-lg aspect-video">
-                    <img
-                      src={project.image || "/placeholder.svg"}
+                    <Image
+                      src={optimized(project.image || "/placeholder.svg")}
                       alt={project.title}
-                      className="w-full h-full object-cover"
+                      fill
+                      sizes="(max-width: 640px) 100vw, 400px"
+                      className="object-cover"
                     />
                     {/* detection-HUD tag, revealed on hover */}
                     <span className="absolute top-2 right-2 font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 bg-background/70 backdrop-blur-sm border border-[var(--hud)]/60 text-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -208,9 +212,12 @@ export function Projects() {
                   <div className="p-6 space-y-8">
                     {/* Hero Image */}
                     <div className="rounded-lg overflow-hidden flex justify-center bg-black/5">
-                      <img
-                        src={selectedProjectData.image || "/placeholder.svg"}
+                      <Image
+                        src={optimized(selectedProjectData.image || "/placeholder.svg")}
                         alt={selectedProjectData.title}
+                        width={1600}
+                        height={1200}
+                        sizes="(max-width: 896px) 100vw, 896px"
                         className="max-h-[60vh] w-auto max-w-full object-contain"
                       />
                     </div>
@@ -290,9 +297,12 @@ export function Projects() {
 
                                       return (
                                         <div key={imgIdx} className="break-inside-avoid rounded-lg overflow-hidden flex flex-col bg-black/5 mb-4">
-                                          <img
-                                            src={src || "/placeholder.svg"}
+                                          <Image
+                                            src={optimized(src || "/placeholder.svg")}
                                             alt={`${step.title} ${imgIdx + 1}`}
+                                            width={1600}
+                                            height={1200}
+                                            sizes="(max-width: 768px) 100vw, 440px"
                                             className="w-full h-auto object-cover"
                                           />
                                           {caption && (
